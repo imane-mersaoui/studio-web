@@ -231,6 +231,9 @@
       display: flex;
       flex-direction: column;
       align-items: center;
+      width: 100%;
+      max-width: 100%;
+      overflow: hidden;
     }
 
     .badge {
@@ -273,9 +276,9 @@
     }
 
     .hero h1 {
-      font-size: clamp(2.2rem, 6vw, 4.2rem);
+      font-size: clamp(1.55rem, 5vw, 4.2rem);
       font-weight: 800;
-      line-height: 1.12;
+      line-height: 1.15;
       max-width: 760px;
       background: linear-gradient(270deg, #6366f1, #8b5cf6, #e8e8f0, #6366f1);
       background-size: 300% 300%;
@@ -814,10 +817,198 @@
     /* Wide card */
     .card-wide { grid-column: span 2; }
 
+    /* ─── HAMBURGER ─── */
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      justify-content: center;
+      gap: 5px;
+      width: 36px;
+      height: 36px;
+      cursor: pointer;
+      background: var(--toggle-bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 7px;
+      transition: background 0.2s;
+    }
+
+    .hamburger span {
+      display: block;
+      height: 2px;
+      background: var(--text);
+      border-radius: 2px;
+      transition: transform 0.3s, opacity 0.3s, width 0.3s;
+      transform-origin: center;
+    }
+
+    .hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+    .hamburger.open span:nth-child(2) { opacity: 0; transform: scaleX(0); }
+    .hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+    /* Mobile nav drawer */
+    .nav-drawer {
+      display: none;
+      position: fixed;
+      top: 61px; left: 0; right: 0;
+      background: var(--nav-bg);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border);
+      padding: 16px 24px 24px;
+      z-index: 800;
+      flex-direction: column;
+      gap: 4px;
+      transform: translateY(-10px);
+      opacity: 0;
+      transition: transform 0.25s ease, opacity 0.25s ease;
+    }
+
+    .nav-drawer.open {
+      transform: none;
+      opacity: 1;
+    }
+
+    .nav-drawer a {
+      display: block;
+      padding: 12px 16px;
+      font-size: 16px;
+      font-weight: 500;
+      color: var(--text2);
+      text-decoration: none;
+      border-radius: 10px;
+      transition: background 0.2s, color 0.2s;
+    }
+
+    .nav-drawer a:hover {
+      background: rgba(99,102,241,0.1);
+      color: var(--text);
+    }
+
+    /* ─── RESPONSIVE BREAKPOINTS ─── */
+
+    /* Tablet — 1024px */
+    @media (max-width: 1024px) {
+      .projects-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    /* Mobile large — 800px */
     @media (max-width: 800px) {
+      /* Nav */
+      .nav { padding: 14px 20px; }
+      .nav-links { display: none; }
+      .hamburger { display: flex; }
+      .nav-drawer { display: flex; }
+
+      /* Hero */
+      .hero { padding: 90px 24px 70px; }
+      .hero-content { width: 100%; max-width: 100%; }
+      .hero h1 {
+        font-size: 1.9rem;
+        line-height: 1.22;
+        max-width: 100%;
+        word-break: break-word;
+        overflow-wrap: break-word;
+        padding: 0 4px;
+      }
+      .hero p.tagline { font-size: 1rem; padding: 0 4px; }
+      .mission { padding: 20px 24px; max-width: 100%; }
+      .cta-row { gap: 10px; }
+      .btn { padding: 12px 20px; font-size: 14px; }
+
+      /* Grid */
       .card-wide { grid-column: span 1; }
       .projects-grid { grid-template-columns: 1fr; }
-      .nav-links { display: none; }
+
+      /* Filter tabs — scrollable */
+      .filter-tabs {
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        justify-content: flex-start;
+        padding-bottom: 4px;
+        scrollbar-width: none;
+        -ms-overflow-style: none;
+      }
+      .filter-tabs::-webkit-scrollbar { display: none; }
+      .filter-tab { flex-shrink: 0; }
+
+      /* Section */
+      #projets { padding: 60px 16px 80px; }
+
+      /* Contact grid */
+      #contact > div > div[style*="grid-template-columns"] {
+        grid-template-columns: 1fr !important;
+      }
+
+      /* Nav right spacing */
+      .nav-right { gap: 8px; }
+      .lang-toggle { padding: 2px; }
+      .lang-btn { padding: 4px 8px; font-size: 11px; }
+    }
+
+    /* Mobile small — 480px */
+    @media (max-width: 480px) {
+      /* Nav */
+      .nav { padding: 12px 16px; }
+      .nav-logo { font-size: 14px; }
+
+      /* Hero */
+      .hero { padding: 80px 20px 56px; }
+      .hero-content { width: 100%; padding: 0 5px; }
+      .hero h1 {
+        font-size: 1.45rem;
+        line-height: 1.28;
+        max-width: 100%;
+        margin-bottom: 14px;
+        word-break: break-word;
+        overflow-wrap: break-word;
+        padding: 0;
+      }
+      .hero p.tagline {
+        font-size: 0.92rem;
+        line-height: 1.65;
+        margin-bottom: 28px;
+        padding: 0;
+      }
+      .badge { font-size: 10px; padding: 5px 12px; margin-bottom: 20px; }
+      .skills { gap: 7px; margin-bottom: 28px; }
+      .skill-pill { padding: 7px 12px; font-size: 11px; gap: 6px; }
+      .skill-dot { width: 6px; height: 6px; }
+      .mission { padding: 16px; border-radius: 14px; max-width: 100%; }
+      .mission p { font-size: 13px; line-height: 1.6; }
+      .mission-icon { font-size: 22px; margin-bottom: 8px; }
+      .cta-row { flex-direction: column; align-items: stretch; margin-top: 28px; }
+      .btn { text-align: center; padding: 13px 20px; }
+
+      /* Scroll hint */
+      .scroll-hint { display: none; }
+
+      /* Section header */
+      .section-title { font-size: 1.6rem; }
+      .section-sub { font-size: 14px; }
+
+      /* Cards */
+      .card-body { padding: 16px 18px 18px; }
+      .card-title { font-size: 15px; }
+      .card-desc { font-size: 13px; }
+      .card-media { aspect-ratio: 4/3; }
+
+      /* Carousel buttons */
+      .carousel-btn { width: 28px; height: 28px; font-size: 13px; }
+
+      /* Contact cards */
+      #contact { padding: 0 16px 60px; }
+
+      /* Lightbox */
+      #lbPrev { left: 8px; width: 40px; height: 40px; }
+      #lbNext { right: 8px; width: 40px; height: 40px; }
+      #lbZoomHint { display: none; }
+      #lbThumbs { bottom: 12px; }
+
+      /* Footer */
+      footer { padding: 32px 16px; font-size: 12px; }
     }
 
     /* ─── SCROLL REVEAL ─── */
@@ -933,8 +1124,18 @@
           <span id="themeIcon">🌙</span>
         </div>
       </button>
+      <div class="hamburger" id="hamburger" onclick="toggleMenu()" aria-label="Menu">
+        <span></span><span></span><span></span>
+      </div>
     </div>
   </nav>
+
+  <!-- Mobile nav drawer -->
+  <div class="nav-drawer" id="navDrawer">
+    <a href="#"        data-i18n="navHome"     onclick="closeMenu()">Accueil</a>
+    <a href="#projets" data-i18n="navProjects" onclick="closeMenu()">Projets</a>
+    <a href="#contact" data-i18n="navContact"  onclick="closeMenu()">Contact</a>
+  </div>
 
 
   <!-- ═══ HERO ═══ -->
@@ -1683,6 +1884,30 @@
       ).join('') + '<span class="tagline-cursor"></span>';
     }
     animateTagline();
+
+    /* ── HAMBURGER MENU ── */
+    function toggleMenu() {
+      const h = document.getElementById('hamburger');
+      const d = document.getElementById('navDrawer');
+      const open = h.classList.toggle('open');
+      d.classList.toggle('open', open);
+      d.style.display = open ? 'flex' : 'flex'; // keep flex, animate via opacity
+    }
+
+    function closeMenu() {
+      document.getElementById('hamburger').classList.remove('open');
+      document.getElementById('navDrawer').classList.remove('open');
+    }
+
+    // Close drawer on outside click
+    document.addEventListener('click', e => {
+      const h = document.getElementById('hamburger');
+      const d = document.getElementById('navDrawer');
+      if (!h.contains(e.target) && !d.contains(e.target)) closeMenu();
+    });
+
+    // Close drawer on scroll
+    window.addEventListener('scroll', closeMenu, { passive: true });
 
     /* ── CURSOR GLOW ── */
     const glow = document.getElementById('cursorGlow');
