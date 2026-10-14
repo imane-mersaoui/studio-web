@@ -1,0 +1,868 @@
+<!DOCTYPE html>
+<html lang="fr" data-theme="light">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Atelier Duo — Design, contenu & développement web</title>
+<meta name="description" content="Studio créatif à Alger : identité visuelle, rédaction & contenu, web design, développement de sites et d'applications (PHP, JavaScript, React, Flutter)."/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --paper:#F2EFE7;--paper2:#E8E4D9;--card:#FBFAF6;--ink:#121212;--ink2:#4a4842;--ink3:#8a867b;
+  --line:rgba(18,18,18,.12);--accent:#FF4D1C;--lime:#D4FF3A;--blue:#3B5BFF;
+  --r:22px;--pad:clamp(16px,4vw,56px);
+  --serif:'Instrument Serif',Georgia,serif;--sans:'Bricolage Grotesque',system-ui,sans-serif;--mono:'JetBrains Mono',monospace;
+}
+[data-theme="dark"]{
+  --paper:#0E0E0D;--paper2:#181816;--card:#1B1B19;--ink:#F2EFE7;--ink2:#bdb8ab;--ink3:#7d796f;--line:rgba(242,239,231,.12);
+}
+html{scroll-behavior:smooth}
+body{font-family:var(--sans);background:var(--paper);color:var(--ink);overflow-x:hidden;transition:background .4s,color .4s;-webkit-font-smoothing:antialiased}
+img{display:block;max-width:100%}
+a{color:inherit}
+::selection{background:var(--accent);color:#fff}
+.wrap{max-width:1400px;margin:0 auto;padding:0 var(--pad)}
+.mono{font-family:var(--mono);font-size:12px;letter-spacing:.06em;text-transform:uppercase}
+.serif{font-family:var(--serif);font-weight:400;font-style:italic}
+
+/* ── NAV ── */
+.nav{position:fixed;top:14px;left:50%;transform:translateX(-50%);z-index:100;width:min(1400px,calc(100% - 24px));
+  display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 10px 10px 20px;
+  background:color-mix(in srgb,var(--paper) 78%,transparent);backdrop-filter:blur(14px);border:1px solid var(--line);border-radius:100px}
+.logo{font-weight:800;font-size:19px;text-decoration:none;letter-spacing:-.02em;display:flex;align-items:center;gap:8px}
+.logo i{width:22px;height:22px;border-radius:50%;background:conic-gradient(var(--accent) 0 50%,var(--ink) 0 100%);display:inline-block;animation:spin 8s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.nav ul{display:flex;list-style:none;gap:4px}
+.nav ul a{text-decoration:none;font-size:14px;padding:8px 14px;border-radius:100px;transition:background .2s}
+.nav ul a:hover{background:var(--paper2)}
+.nav-r{display:flex;gap:8px;align-items:center}
+.btn{display:inline-flex;align-items:center;gap:8px;font-family:var(--sans);font-weight:600;font-size:14px;border:none;cursor:pointer;
+  padding:12px 20px;border-radius:100px;text-decoration:none;transition:transform .2s,background .2s,color .2s}
+.btn-ink{background:var(--ink);color:var(--paper)}
+.btn-ink:hover{background:var(--accent);color:#fff;transform:translateY(-2px)}
+.btn-ghost{background:transparent;color:var(--ink);border:1px solid var(--line)}
+.btn-ghost:hover{border-color:var(--ink)}
+.icon-btn{width:42px;height:42px;border-radius:50%;border:1px solid var(--line);background:transparent;color:var(--ink);cursor:pointer;display:grid;place-items:center;font-size:16px}
+.burger{display:none}
+@media(max-width:960px){.nav ul{display:none}.burger{display:grid}
+  .nav.open ul{display:flex;flex-direction:column;position:absolute;top:62px;left:0;right:0;background:var(--card);border:1px solid var(--line);border-radius:20px;padding:10px}}
+@media(max-width:520px){.nav .btn-ink{display:none}}
+
+/* ── HERO ── */
+.hero{padding:130px 0 60px;position:relative}
+.hero-top{display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;margin-bottom:28px}
+.pill{display:inline-flex;align-items:center;gap:8px;padding:7px 14px;border:1px solid var(--line);border-radius:100px;font-size:13px;background:var(--card)}
+.dot{width:8px;height:8px;border-radius:50%;background:#22c55e;box-shadow:0 0 0 4px rgba(34,197,94,.18);animation:pulse 2s infinite}
+@keyframes pulse{50%{box-shadow:0 0 0 8px rgba(34,197,94,0)}}
+.hero h1{font-size:clamp(3rem,10.5vw,10.5rem);line-height:.86;letter-spacing:-.055em;font-weight:800}
+.hero h1 .serif{font-weight:400;letter-spacing:-.03em;color:var(--accent)}
+.hero h1 .rot{display:inline-block;position:relative;vertical-align:bottom;overflow:hidden;height:.9em}
+.hero h1 .rot span{display:block;animation:rot 9s cubic-bezier(.7,0,.2,1) infinite}
+@keyframes rot{0%,28%{transform:translateY(0)}33%,61%{transform:translateY(-100%)}66%,94%{transform:translateY(-200%)}100%{transform:translateY(-300%)}}
+.hero h1 .rot b{display:block;height:.9em;line-height:.9em;font-weight:800}
+.hero-grid{display:grid;grid-template-columns:1.05fr 1fr;gap:clamp(20px,4vw,60px);margin-top:44px;align-items:end}
+.hero-lead{font-size:clamp(1.05rem,1.6vw,1.3rem);line-height:1.55;color:var(--ink2);max-width:540px}
+.hero-lead strong{color:var(--ink)}
+.hero-cta{display:flex;gap:10px;flex-wrap:wrap;margin-top:28px}
+.stack{display:flex;flex-wrap:wrap;gap:8px;margin-top:30px}
+.chip{font-family:var(--mono);font-size:12px;padding:7px 12px;border-radius:8px;background:var(--paper2);border:1px solid var(--line)}
+
+/* compare slider */
+.compare{position:relative;aspect-ratio:4/3;border-radius:var(--r);overflow:hidden;border:1px solid var(--line);user-select:none;touch-action:none;cursor:ew-resize;background:var(--card)}
+.compare img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.sketch{position:absolute;inset:0;background:#1d3fd8;
+  background-image:linear-gradient(rgba(255,255,255,.12) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.12) 1px,transparent 1px);background-size:24px 24px;
+  clip-path:inset(0 calc(100% - var(--pos,50%)) 0 0)}
+.sketch .wf{position:absolute;border:1.5px dashed rgba(255,255,255,.8);border-radius:10px}
+.sketch .lbl{position:absolute;font-family:var(--mono);font-size:11px;color:#fff;opacity:.9}
+.handle{position:absolute;top:0;bottom:0;left:var(--pos,50%);width:2px;background:#fff;transform:translateX(-1px)}
+.handle::after{content:'⟷';position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:46px;height:46px;border-radius:50%;background:#fff;color:#111;display:grid;place-items:center;font-size:18px;box-shadow:0 8px 30px rgba(0,0,0,.25)}
+.compare .tag{position:absolute;bottom:14px;padding:6px 12px;border-radius:100px;background:rgba(0,0,0,.6);color:#fff;font-family:var(--mono);font-size:11px;backdrop-filter:blur(6px)}
+@media(max-width:860px){.hero-grid{grid-template-columns:1fr}}
+
+/* ── MARQUEE ── */
+.marquee{border-block:1px solid var(--line);overflow:hidden;padding:20px 0;background:var(--ink);color:var(--paper)}
+.marquee-track{display:flex;width:max-content;animation:roll 34s linear infinite}
+.marquee span{font-size:clamp(1.4rem,3vw,2.4rem);font-weight:800;letter-spacing:-.02em;padding:0 28px;display:flex;align-items:center;gap:28px;white-space:nowrap}
+.marquee span .serif{color:var(--lime)}
+.marquee span::after{content:'✺';color:var(--accent);font-size:.7em}
+@keyframes roll{to{transform:translateX(-50%)}}
+
+/* ── SECTIONS ── */
+section{padding:clamp(70px,10vw,130px) 0}
+.sec-head{display:flex;justify-content:space-between;align-items:flex-end;gap:24px;flex-wrap:wrap;margin-bottom:48px}
+.sec-head h2{font-size:clamp(2.2rem,5.5vw,5rem);line-height:.95;letter-spacing:-.045em;font-weight:800;max-width:900px}
+.sec-head h2 .serif{color:var(--accent)}
+.sec-head p{max-width:380px;color:var(--ink2);line-height:1.6}
+.kicker{display:block;margin-bottom:16px;color:var(--ink3)}
+
+/* ── SERVICES ── */
+.svc-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.svc{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:28px;display:flex;flex-direction:column;gap:16px;min-height:300px;position:relative;overflow:hidden;transition:transform .35s,border-color .35s}
+.svc:hover{transform:translateY(-6px);border-color:var(--ink)}
+.svc .n{font-family:var(--mono);font-size:12px;color:var(--ink3)}
+.svc h3{font-size:1.65rem;letter-spacing:-.03em;line-height:1.05}
+.svc p{color:var(--ink2);line-height:1.6;font-size:15px}
+.svc ul{list-style:none;display:flex;flex-wrap:wrap;gap:6px;margin-top:auto}
+.svc li{font-size:12px;padding:5px 10px;border-radius:100px;border:1px solid var(--line)}
+.svc .ico{width:52px;height:52px;border-radius:14px;display:grid;place-items:center;font-size:24px}
+.svc.big{grid-column:span 2;background:var(--ink);color:var(--paper)}
+.svc.big p{color:color-mix(in srgb,var(--paper) 70%,transparent)}
+.svc.big li{border-color:rgba(255,255,255,.2)}
+.svc.big .n{color:var(--lime)}
+.code{font-family:var(--mono);font-size:13px;line-height:1.7;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:14px;padding:16px;color:#d6d3c8;overflow:hidden;white-space:pre}
+.code .k{color:#ff8a65}.code .s{color:var(--lime)}.code .c{color:#7d796f}
+.techs{display:grid;grid-template-columns:repeat(6,1fr);gap:8px}
+.tech{border:1px solid rgba(255,255,255,.14);border-radius:12px;padding:12px 6px;text-align:center;font-family:var(--mono);font-size:11px}
+.tech b{display:block;font-family:var(--sans);font-size:20px;margin-bottom:4px}
+@media(max-width:1000px){.svc-grid{grid-template-columns:1fr 1fr}.svc.big{grid-column:span 2}}
+@media(max-width:640px){.svc-grid{grid-template-columns:1fr}.svc.big{grid-column:auto}.techs{grid-template-columns:repeat(3,1fr)}}
+
+/* ── WORK ── */
+.filters{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:28px}
+.filter{font-family:var(--sans);font-size:14px;font-weight:600;padding:10px 18px;border-radius:100px;border:1px solid var(--line);background:transparent;color:var(--ink);cursor:pointer;transition:all .2s}
+.filter sup{font-family:var(--mono);font-size:10px;margin-left:4px;opacity:.6}
+.filter.on{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+.masonry{columns:3 320px;column-gap:14px}
+.item{display:block;text-decoration:none;color:inherit;break-inside:avoid;margin-bottom:14px;border-radius:18px;overflow:hidden;position:relative;cursor:zoom-in;background:var(--paper2);border:1px solid var(--line);
+  opacity:0;transform:translateY(24px);transition:opacity .6s,transform .6s}
+.item.in{opacity:1;transform:none}
+.item.hide{display:none}
+.item img{width:100%;height:auto;transition:transform .8s cubic-bezier(.2,.7,.2,1)}
+.item:hover img{transform:scale(1.04)}
+.item .cap{position:absolute;left:10px;right:10px;bottom:10px;padding:12px 14px;border-radius:12px;background:color-mix(in srgb,var(--card) 92%,transparent);backdrop-filter:blur(10px);
+  display:flex;justify-content:space-between;align-items:center;gap:10px;transform:translateY(130%);transition:transform .35s}
+.item:hover .cap,.item:focus-visible .cap{transform:none}
+.cap b{font-size:15px;display:block}
+.cap small{font-size:12px;color:var(--ink2)}
+.cap .t{font-family:var(--mono);font-size:10px;padding:4px 8px;border-radius:6px;background:var(--accent);color:#fff;white-space:nowrap}
+@media(hover:none){.item .cap{transform:none}}
+/* web cards */
+.item.web{cursor:pointer}
+.browser{background:var(--card)}
+.bbar{display:flex;align-items:center;gap:6px;padding:10px 12px;border-bottom:1px solid var(--line)}
+.bbar i{width:9px;height:9px;border-radius:50%;background:var(--line)}
+.bbar i:nth-child(1){background:#ff5f57}.bbar i:nth-child(2){background:#febc2e}.bbar i:nth-child(3){background:#28c840}
+.bbar span{margin-left:8px;font-family:var(--mono);font-size:11px;color:var(--ink3);flex:1;background:var(--paper2);border-radius:6px;padding:3px 8px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.shot{aspect-ratio:16/10;overflow:hidden;background:linear-gradient(135deg,var(--paper2),var(--card));display:grid;place-items:center;color:var(--ink3);font-family:var(--mono);font-size:12px}
+.shot img{width:100%;height:100%;object-fit:cover;object-position:top}
+
+/* ── CASE STUDY (horizontal) ── */
+.case{background:#0f2a1c;color:#F2EFE7;overflow:hidden}
+.case .sec-head h2 .serif{color:#d9b77e}
+.case .sec-head p{color:rgba(242,239,231,.7)}
+.case .kicker{color:#d9b77e}
+.h-scroll{display:flex;gap:16px;overflow-x:auto;scroll-snap-type:x mandatory;padding:0 var(--pad) 24px;scrollbar-width:thin;scrollbar-color:#d9b77e transparent}
+.h-card{flex:0 0 min(420px,82vw);scroll-snap-align:start;border-radius:var(--r);overflow:hidden;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1)}
+.h-card img{width:100%;aspect-ratio:4/3;object-fit:cover}
+.h-card div{padding:18px 20px}
+.h-card .step{font-family:var(--mono);font-size:11px;color:#d9b77e}
+.h-card h4{font-size:1.3rem;margin:6px 0;letter-spacing:-.02em}
+.h-card p{font-size:14px;color:rgba(242,239,231,.65);line-height:1.55}
+.case-nav{display:flex;gap:8px}
+.case-nav button{width:48px;height:48px;border-radius:50%;border:1px solid rgba(255,255,255,.25);background:transparent;color:#fff;font-size:18px;cursor:pointer}
+.case-nav button:hover{background:#d9b77e;color:#0f2a1c}
+
+/* ── FLUX+ DEMO ── */
+.demo-bar{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:16px}
+.seg{display:flex;padding:4px;border-radius:100px;background:var(--paper2);border:1px solid var(--line)}
+.seg button{border:none;background:transparent;color:var(--ink2);font-family:var(--sans);font-weight:600;font-size:13px;padding:8px 16px;border-radius:100px;cursor:pointer}
+.seg button.on{background:var(--ink);color:var(--paper)}
+.stage{background:var(--paper2);border:1px solid var(--line);border-radius:28px;padding:clamp(10px,3vw,36px);display:flex;justify-content:center}
+.device{width:100%;max-width:1200px;border-radius:16px;overflow:hidden;border:1px solid var(--line);box-shadow:0 40px 80px -30px rgba(0,0,0,.35);transition:max-width .6s cubic-bezier(.7,0,.2,1);background:#07070c}
+.device.tab{max-width:768px}.device.mob{max-width:390px;border-radius:34px;border:8px solid #111}
+.device .bbar{background:#15151d;border-color:#22222d}
+.device .bbar span{background:#22222d;color:#8b8ba0}
+.device.mob .bbar{display:none}
+.fx-scroll{height:620px;overflow-y:auto;scrollbar-width:thin;scrollbar-color:#333 transparent}
+
+/* Flux+ app (scoped) */
+.fx{--fx-acc:#7C5CFF;--fx-acc2:#00E0B8;font-family:var(--sans);color:#ECECF5;background:#07070c;container-type:inline-size}
+.fx-nav{position:sticky;top:0;z-index:5;display:flex;align-items:center;gap:22px;padding:14px 22px;background:linear-gradient(#07070c,rgba(7,7,12,.6));backdrop-filter:blur(8px)}
+.fx-logo{font-weight:800;font-size:22px;letter-spacing:-.04em}
+.fx-logo span{background:linear-gradient(90deg,var(--fx-acc),var(--fx-acc2));-webkit-background-clip:text;background-clip:text;color:transparent}
+.fx-links{display:flex;gap:16px;font-size:13px;color:#9b9bb0}
+.fx-links a{text-decoration:none;cursor:pointer}.fx-links a.on{color:#fff}
+.fx-sp{flex:1}
+.fx-search{width:34px;height:34px;border-radius:50%;background:#1a1a24;display:grid;place-items:center;font-size:14px}
+.fx-av{width:34px;height:34px;border-radius:10px;background:linear-gradient(135deg,#FF4D1C,#7C5CFF)}
+.fx-hero{position:relative;min-height:420px;display:flex;align-items:flex-end;padding:32px 22px;overflow:hidden}
+.fx-hero-bg{position:absolute;inset:0;transition:background 1s}
+.fx-hero-bg::after{content:'';position:absolute;inset:0;background:linear-gradient(0deg,#07070c 6%,transparent 60%),linear-gradient(90deg,rgba(7,7,12,.85),transparent 70%)}
+.fx-orb{position:absolute;border-radius:50%;filter:blur(40px);opacity:.75;animation:float 9s ease-in-out infinite}
+@keyframes float{50%{transform:translate(30px,-20px) scale(1.1)}}
+.fx-hero-c{position:relative;max-width:520px}
+.fx-badge{display:inline-flex;gap:6px;align-items:center;font-size:11px;font-family:var(--mono);padding:5px 10px;border-radius:100px;background:rgba(255,255,255,.1);margin-bottom:14px}
+.fx-badge b{width:7px;height:7px;border-radius:50%;background:#ff3b5c;animation:pulse 1.6s infinite}
+.fx-hero h3{font-size:clamp(2rem,6cqw,3.6rem);line-height:.95;letter-spacing:-.04em;margin-bottom:12px}
+.fx-hero p{color:#b5b5c8;font-size:14px;line-height:1.6;margin-bottom:18px}
+.fx-meta{display:flex;gap:10px;font-size:12px;color:#9b9bb0;margin-bottom:18px;flex-wrap:wrap}
+.fx-btns{display:flex;gap:10px;flex-wrap:wrap}
+.fx-btn{border:none;cursor:pointer;font-family:var(--sans);font-weight:700;font-size:14px;padding:12px 20px;border-radius:12px;background:#fff;color:#07070c}
+.fx-btn.alt{background:rgba(255,255,255,.12);color:#fff}
+.fx-dots{position:absolute;right:22px;bottom:32px;display:flex;gap:6px}
+.fx-dots i{width:22px;height:4px;border-radius:4px;background:rgba(255,255,255,.25);cursor:pointer}
+.fx-dots i.on{background:#fff;width:36px}
+.fx-row{padding:8px 22px 22px}
+.fx-row h5{font-size:16px;margin-bottom:12px;display:flex;justify-content:space-between}
+.fx-row h5 small{font-weight:400;color:#7c7c92;font-size:12px}
+.fx-rail{display:grid;grid-auto-flow:column;grid-auto-columns:minmax(150px,1fr);gap:12px;overflow-x:auto;padding-bottom:6px;scrollbar-width:none}
+.fx-card{aspect-ratio:2/3;border-radius:12px;position:relative;overflow:hidden;cursor:pointer;transition:transform .3s}
+.fx-card:hover{transform:translateY(-4px) scale(1.02)}
+.fx-card .g{position:absolute;inset:0}
+.fx-card span{position:absolute;left:10px;right:10px;bottom:10px;font-weight:800;font-size:15px;line-height:1.05;letter-spacing:-.02em}
+.fx-card em{position:absolute;top:8px;left:8px;font-style:normal;font-family:var(--mono);font-size:9px;padding:3px 6px;border-radius:5px;background:rgba(0,0,0,.5)}
+.fx-wide .fx-rail{grid-auto-columns:minmax(220px,1fr)}
+.fx-wide .fx-card{aspect-ratio:16/10}
+.fx-prog{position:absolute;left:0;bottom:0;height:3px;background:var(--fx-acc2)}
+.fx-radio{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px}
+.fx-st{background:#13131b;border:1px solid #22222d;border-radius:14px;padding:14px;display:flex;align-items:center;gap:10px;cursor:pointer}
+.fx-st:hover,.fx-st.on{border-color:var(--fx-acc)}
+.fx-st i{width:38px;height:38px;border-radius:10px;flex:none}
+.fx-st b{font-size:13px;display:block}.fx-st small{font-size:11px;color:#7c7c92}
+.fx-eq{display:flex;gap:2px;align-items:flex-end;height:14px;margin-left:auto}
+.fx-eq s{width:3px;background:var(--fx-acc2);animation:eq .8s ease-in-out infinite;text-decoration:none}
+.fx-eq s:nth-child(2){animation-delay:.2s}.fx-eq s:nth-child(3){animation-delay:.4s}
+@keyframes eq{0%,100%{height:3px}50%{height:14px}}
+.fx-st:not(.on) .fx-eq{visibility:hidden}
+.fx-foot{padding:26px 22px 40px;color:#5d5d70;font-size:12px;border-top:1px solid #1a1a24;margin-top:10px}
+.fx-links{overflow-x:auto;scrollbar-width:none;white-space:nowrap}
+@container (max-width:560px){.fx-nav{flex-wrap:wrap;row-gap:10px}.fx-links{order:5;width:100%;gap:8px}.fx-links a{padding:6px 12px;border-radius:100px;background:#1a1a24}.fx-links a.on{background:#fff;color:#07070c}.fx-hero{min-height:480px}.fx-dots{display:none}}
+
+.demo-notes{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:18px}
+.note{padding:18px;border-radius:16px;border:1px solid var(--line);background:var(--card)}
+.note b{display:block;margin-bottom:4px}
+.note p{font-size:14px;color:var(--ink2);line-height:1.5}
+@media(max-width:760px){.demo-notes{grid-template-columns:1fr}.fx-scroll{height:560px}}
+
+/* ── PROCESS ── */
+.steps{display:grid;grid-template-columns:repeat(5,1fr);border-top:1px solid var(--line)}
+.stp{padding:26px 20px 10px 0;border-right:1px solid var(--line);position:relative}
+.stp:last-child{border-right:none}
+.stp:not(:first-child){padding-left:20px}
+.stp .no{font-family:var(--serif);font-style:italic;font-size:3.4rem;line-height:1;color:var(--accent)}
+.stp h4{font-size:1.15rem;margin:12px 0 8px}
+.stp p{font-size:14px;color:var(--ink2);line-height:1.55}
+.stp .d{font-family:var(--mono);font-size:11px;color:var(--ink3);margin-top:12px;display:block}
+@media(max-width:900px){.steps{grid-template-columns:1fr 1fr}.stp{border-right:none;border-bottom:1px solid var(--line);padding-left:0!important}}
+@media(max-width:520px){.steps{grid-template-columns:1fr}}
+
+/* ── TEAM ── */
+.team{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.mate{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:28px;display:grid;grid-template-columns:96px 1fr;gap:22px;align-items:start}
+.ava{width:96px;height:96px;border-radius:24px;display:grid;place-items:center;font-weight:800;font-size:30px;color:#fff}
+.mate h3{font-size:1.5rem;letter-spacing:-.03em}
+.mate .role{font-family:var(--mono);font-size:12px;color:var(--accent);margin:4px 0 12px;display:block}
+.mate p{color:var(--ink2);line-height:1.6;font-size:15px}
+.mate .stack{margin-top:14px}
+@media(max-width:860px){.team{grid-template-columns:1fr}.mate{grid-template-columns:1fr}}
+
+/* ── STATS ── */
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+.stat{border-radius:var(--r);padding:26px;background:var(--lime);color:#121212}
+.stat:nth-child(2){background:var(--accent);color:#fff}
+.stat:nth-child(3){background:var(--ink);color:var(--paper)}
+.stat:nth-child(4){background:var(--blue);color:#fff}
+.stat b{font-size:clamp(2.4rem,5vw,4rem);letter-spacing:-.05em;display:block;line-height:1}
+.stat span{font-size:14px;opacity:.8}
+@media(max-width:860px){.stats{grid-template-columns:1fr 1fr}}
+
+/* ── CONFIGURATOR ── */
+.config{display:grid;grid-template-columns:1.3fr 1fr;gap:14px}
+.panel{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:clamp(20px,3vw,34px)}
+.q{margin-bottom:26px}
+.q > label,.q > .ql{display:block;font-weight:700;margin-bottom:12px}
+.q > .ql small{font-weight:400;color:var(--ink3);margin-left:6px}
+.opts{display:flex;flex-wrap:wrap;gap:8px}
+.opt input{position:absolute;opacity:0;pointer-events:none}
+.opt span{display:inline-flex;align-items:center;gap:6px;padding:10px 16px;border-radius:100px;border:1px solid var(--line);cursor:pointer;font-size:14px;transition:all .2s}
+.opt input:checked+span{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+.opt input:focus-visible+span{outline:2px solid var(--accent);outline-offset:2px}
+.field{width:100%;font-family:var(--sans);font-size:15px;padding:13px 16px;border-radius:14px;border:1px solid var(--line);background:var(--paper);color:var(--ink)}
+.field:focus{outline:none;border-color:var(--ink)}
+textarea.field{min-height:90px;resize:vertical}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.recap{background:var(--ink);color:var(--paper);position:sticky;top:90px;align-self:start}
+.recap h3{font-size:1.6rem;letter-spacing:-.03em;margin-bottom:6px}
+.recap .sub{color:color-mix(in srgb,var(--paper) 60%,transparent);font-size:14px;margin-bottom:20px}
+.recap ul{list-style:none;border-top:1px solid rgba(255,255,255,.14);margin-bottom:18px}
+.recap li{display:flex;justify-content:space-between;gap:12px;padding:11px 0;border-bottom:1px solid rgba(255,255,255,.14);font-size:14px}
+.recap li span:last-child{text-align:right;color:var(--lime)}
+.recap .empty{color:rgba(255,255,255,.4);font-style:italic}
+.meter{height:8px;border-radius:8px;background:rgba(255,255,255,.12);overflow:hidden;margin:6px 0 18px}
+.meter i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--lime),var(--accent));transition:width .5s}
+.recap .btn{width:100%;justify-content:center;margin-top:8px}
+.btn-lime{background:var(--lime);color:#121212}
+.btn-lime:hover{background:#fff}
+.btn-out{background:transparent;color:var(--paper);border:1px solid rgba(255,255,255,.3)}
+.btn-out:hover{border-color:#fff}
+@media(max-width:900px){.config{grid-template-columns:1fr}.recap{position:static}.row2{grid-template-columns:1fr}}
+
+/* ── FAQ ── */
+.faq details{border-top:1px solid var(--line);padding:22px 0}
+.faq details:last-child{border-bottom:1px solid var(--line)}
+.faq summary{list-style:none;cursor:pointer;display:flex;justify-content:space-between;gap:20px;font-size:clamp(1.1rem,2vw,1.45rem);font-weight:600;letter-spacing:-.02em}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary::after{content:'+';font-weight:400;font-size:1.6em;line-height:.8;transition:transform .3s}
+.faq details[open] summary::after{transform:rotate(45deg)}
+.faq details p{margin-top:12px;color:var(--ink2);line-height:1.65;max-width:780px}
+
+/* ── CTA / FOOTER ── */
+.big-cta{padding:clamp(80px,12vw,160px) 0;text-align:center}
+.big-cta h2{font-size:clamp(3rem,11vw,10rem);line-height:.86;letter-spacing:-.06em;font-weight:800}
+.big-cta h2 .serif{color:var(--accent)}
+.big-cta .hero-cta{justify-content:center}
+footer{border-top:1px solid var(--line);padding:28px 0}
+.foot{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;font-size:13px;color:var(--ink2)}
+.foot a{text-decoration:none}.foot a:hover{color:var(--accent)}
+
+/* ── LIGHTBOX ── */
+.lb{position:fixed;inset:0;z-index:300;background:rgba(10,10,10,.92);display:none;align-items:center;justify-content:center;padding:60px 16px}
+.lb.on{display:flex}
+.lb img{max-width:min(1400px,100%);max-height:100%;border-radius:12px;object-fit:contain}
+.lb button{position:absolute;width:48px;height:48px;border-radius:50%;border:1px solid rgba(255,255,255,.3);background:rgba(0,0,0,.4);color:#fff;font-size:20px;cursor:pointer}
+.lb .x{top:16px;right:16px}.lb .p{left:16px;top:50%}.lb .n{right:16px;top:50%}
+.lb .c{position:absolute;bottom:18px;left:0;right:0;text-align:center;color:#fff;font-size:14px}
+
+/* reveal */
+.rv{opacity:0;transform:translateY(30px);transition:opacity .8s,transform .8s}
+.rv.in{opacity:1;transform:none}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}.rv,.item{opacity:1;transform:none}}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav" id="nav">
+  <a href="#top" class="logo"><i></i>Atelier Duo</a>
+  <ul>
+    <li><a href="#services">Services</a></li>
+    <li><a href="#travaux">Réalisations</a></li>
+    <li><a href="#demo">Démo Flux+</a></li>
+    <li><a href="#process">Méthode</a></li>
+    <li><a href="#contact">Contact</a></li>
+    <li><a href="index.html">Portfolio dev ↗</a></li>
+  </ul>
+  <div class="nav-r">
+    <button class="icon-btn" id="theme" aria-label="Changer de thème">☾</button>
+    <button class="icon-btn burger" id="burger" aria-label="Menu">☰</button>
+    <a href="#projet" class="btn btn-ink">Lancer mon projet →</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<header class="hero" id="top">
+  <div class="wrap">
+    <div class="hero-top">
+      <span class="pill"><span class="dot"></span>Studio créatif & technique · Alger — à distance partout</span>
+      <span class="mono" style="color:var(--ink3)">Design · Contenu · Code</span>
+    </div>
+    <h1>On crée des<br/>
+      <span class="rot"><span><b>marques</b><b>sites</b><b>apps</b><b>marques</b></span></span>
+      <span class="serif">qui marquent.</span>
+    </h1>
+    <div class="hero-grid">
+      <div>
+        <p class="hero-lead">Vous voulez <strong>créer ou refaire votre site</strong>, lancer une application ou donner une vraie identité à votre marque&nbsp;? Design et développement réunis : <strong>de la rédaction au logo, de la maquette au code en ligne</strong> — un seul interlocuteur, zéro perte en route.</p>
+        <div class="hero-cta">
+          <a href="#projet" class="btn btn-ink">Décrire mon projet →</a>
+          <a href="#travaux" class="btn btn-ghost">Voir nos réalisations</a>
+        </div>
+        <div class="stack">
+          <span class="chip">PHP</span><span class="chip">JavaScript</span><span class="chip">React</span><span class="chip">Flutter</span><span class="chip">Node.js</span><span class="chip">MySQL</span><span class="chip">Figma</span><span class="chip">Illustrator</span><span class="chip">Photoshop</span>
+        </div>
+      </div>
+      <div class="compare rv" id="compare" style="--pos:52%">
+        <img src="assets/studio/niya-stationery.jpg" alt="Papeterie Niya Food — rendu final" />
+        <div class="sketch" aria-hidden="true">
+          <div class="wf" style="left:8%;top:10%;width:38%;height:72%"></div>
+          <div class="wf" style="left:52%;top:10%;width:40%;height:30%"></div>
+          <div class="wf" style="left:52%;top:46%;width:40%;height:36%"></div>
+          <span class="lbl" style="left:10%;top:13%">// en-tête A4</span>
+          <span class="lbl" style="left:54%;top:13%">// carte 85×55</span>
+          <span class="lbl" style="left:54%;top:49%">// chemise</span>
+          <span class="lbl" style="left:10%;bottom:8%">grille 12 col · logo 18mm</span>
+        </div>
+        <div class="handle"></div>
+        <span class="tag" style="left:14px">01 — Idée</span>
+        <span class="tag" style="right:14px">02 — Rendu</span>
+      </div>
+    </div>
+  </div>
+</header>
+
+<div class="marquee" aria-hidden="true">
+  <div class="marquee-track">
+    <span>Identité visuelle</span><span><em class="serif">Rédaction</em></span><span>Web design</span><span>Sites vitrines</span><span><em class="serif">E-commerce</em></span><span>Apps Flutter</span><span>Social media</span><span>Packaging</span><span><em class="serif">Print</em></span>
+    <span>Identité visuelle</span><span><em class="serif">Rédaction</em></span><span>Web design</span><span>Sites vitrines</span><span><em class="serif">E-commerce</em></span><span>Apps Flutter</span><span>Social media</span><span>Packaging</span><span><em class="serif">Print</em></span>
+  </div>
+</div>
+
+<!-- SERVICES -->
+<section id="services">
+  <div class="wrap">
+    <div class="sec-head rv">
+      <div><span class="kicker mono">( Services )</span>
+      <h2>Tout ce qu'il faut pour <span class="serif">exister en ligne</span> — sous un même toit.</h2></div>
+      <p>Chaque projet peut prendre une seule brique ou l'ensemble. On assemble selon votre besoin, votre budget et votre calendrier.</p>
+    </div>
+    <div class="svc-grid">
+      <article class="svc rv">
+        <span class="n">01</span>
+        <div class="ico" style="background:#FFE3D9">✍︎</div>
+        <h3>Rédaction & contenu</h3>
+        <p>Textes de site optimisés SEO, slogans, fiches produits, calendrier éditorial et légendes pour vos réseaux. En français, arabe ou anglais.</p>
+        <ul><li>Copywriting</li><li>SEO</li><li>Stratégie éditoriale</li></ul>
+      </article>
+      <article class="svc rv">
+        <span class="n">02</span>
+        <div class="ico" style="background:#EEF9C9">◎</div>
+        <h3>Identité & branding</h3>
+        <p>Logo, palette, typographies, charte graphique et déclinaisons. Une marque cohérente du flacon jusqu'à la page d'accueil.</p>
+        <ul><li>Logo</li><li>Charte</li><li>Packaging</li><li>Print</li></ul>
+      </article>
+      <article class="svc rv">
+        <span class="n">03</span>
+        <div class="ico" style="background:#DEE4FF">▦</div>
+        <h3>Web design UI/UX</h3>
+        <p>Maquettes Figma cliquables, parcours utilisateur pensés pour convertir, design responsive mobile-first, prototype validé avant le code.</p>
+        <ul><li>Figma</li><li>Prototype</li><li>Design system</li></ul>
+      </article>
+      <article class="svc big rv">
+        <span class="n">04 — Développement</span>
+        <h3>Sites & applications sur mesure, du back-end à l'App Store.</h3>
+        <p>Sites vitrines, e-commerce, plateformes métier, dashboards et applications mobiles. Code propre, rapide, sécurisé — et vous gardez la main sur votre contenu.</p>
+        <div class="techs">
+          <div class="tech"><b>php</b>Laravel / WP</div>
+          <div class="tech"><b>JS</b>Vanilla / Node</div>
+          <div class="tech"><b>⚛</b>React</div>
+          <div class="tech"><b>◢</b>Flutter</div>
+          <div class="tech"><b>⛁</b>MySQL / PG</div>
+          <div class="tech"><b>⇆</b>API REST</div>
+        </div>
+      </article>
+      <article class="svc rv" style="background:var(--ink);color:var(--paper)">
+        <span class="n" style="color:var(--lime)">05 — Refonte</span>
+        <div class="code"><span class="c">// votre site actuel</span>
+<span class="k">const</span> site = audit(<span class="s">"vous.dz"</span>);
+site.design  = <span class="s">"moderne"</span>;
+site.vitesse = <span class="s">"x3"</span>;
+site.seo     = <span class="s">"optimisé"</span>;
+<span class="k">await</span> deploy(site); <span class="c">// ✓</span></div>
+        <p style="color:color-mix(in srgb,var(--paper) 70%,transparent)">Votre site a vieilli&nbsp;? Audit gratuit, refonte visuelle et technique, migration sans perte.</p>
+      </article>
+      <article class="svc rv">
+        <span class="n">06</span>
+        <div class="ico" style="background:#F3E3FF">♥</div>
+        <h3>Social media</h3>
+        <p>Templates Instagram, campagnes, posts saisonniers (Ramadan, lancements), stories et visuels publicitaires prêts à publier.</p>
+        <ul><li>Instagram</li><li>Campagnes</li><li>Stories</li></ul>
+      </article>
+      <article class="svc rv">
+        <span class="n">07</span>
+        <div class="ico" style="background:#FFF2C2">▤</div>
+        <h3>Print & packaging</h3>
+        <p>Étiquettes, catalogues, dépliants, roll-ups, flyers, bloc-notes et goodies. Fichiers prêts pour l'imprimeur.</p>
+        <ul><li>Catalogue</li><li>Roll-up</li><li>Étiquettes</li></ul>
+      </article>
+      <a href="#projet" class="svc rv" style="background:var(--accent);color:#fff;text-decoration:none;border-color:var(--accent)">
+        <span class="n" style="color:#fff;opacity:.8">08 — Sur mesure</span>
+        <h3 style="font-size:2.2rem">Un besoin qui ne rentre dans aucune case&nbsp;?</h3>
+        <p style="color:rgba(255,255,255,.85)">Dashboard, intranet, plateforme de sondage, appli métier… Racontez-nous, on construit.</p>
+        <span style="margin-top:auto;font-weight:700">Composer mon projet →</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- WORK -->
+<section id="travaux" style="padding-top:0">
+  <div class="wrap">
+    <div class="sec-head rv">
+      <div><span class="kicker mono">( Réalisations )</span>
+      <h2>Des projets réels, <span class="serif">des marques vivantes.</span></h2></div>
+      <p>Filtrez par discipline. Cliquez sur un visuel pour l'agrandir, ou sur un site pour le visiter en ligne.</p>
+    </div>
+    <div class="filters" id="filters" role="tablist"></div>
+    <div class="masonry" id="grid"></div>
+  </div>
+</section>
+
+<!-- CASE STUDY -->
+<section class="case" id="cas">
+  <div class="wrap">
+    <div class="sec-head rv">
+      <div><span class="kicker mono">( Étude de cas · Niya Food )</span>
+      <h2>De zéro à une marque <span class="serif">complète.</span></h2></div>
+      <div style="display:flex;flex-direction:column;gap:18px;align-items:flex-end">
+        <p>Marque agroalimentaire créée de A à Z avec une architecture à trois gammes : Classique, VIP et Luxe. Voici le parcours.</p>
+        <div class="case-nav"><button id="cPrev" aria-label="Précédent">←</button><button id="cNext" aria-label="Suivant">→</button></div>
+      </div>
+    </div>
+  </div>
+  <div class="h-scroll" id="hscroll"></div>
+</section>
+
+<!-- FLUX+ DEMO -->
+<section id="demo">
+  <div class="wrap">
+    <div class="sec-head rv">
+      <div><span class="kicker mono">( Exemple live · Page d'accueil )</span>
+      <h2>Flux+ — une home page <span class="serif">codée, pas juste dessinée.</span></h2></div>
+      <p>Ce n'est pas une image : c'est une vraie page d'accueil interactive. Changez d'écran, cliquez sur les onglets, lancez une radio. Voilà ce que nous livrons.</p>
+    </div>
+    <div class="demo-bar">
+      <div class="seg" id="devSeg">
+        <button class="on" data-d="">🖥 Desktop</button><button data-d="tab">▭ Tablette</button><button data-d="mob">▯ Mobile</button>
+      </div>
+      <span class="mono" style="color:var(--ink3)">HTML · CSS · JavaScript — responsive</span>
+    </div>
+    <div class="stage rv">
+      <div class="device" id="device">
+        <div class="bbar"><i></i><i></i><i></i><span>https://fluxplus.app</span></div>
+        <div class="fx-scroll">
+          <div class="fx" id="fx">
+            <div class="fx-nav">
+              <div class="fx-logo">flux<span>+</span></div>
+              <div class="fx-links" id="fxTabs">
+                <a class="on" data-t="all">Accueil</a><a data-t="serie">Séries</a><a data-t="film">Films</a><a data-t="live">En direct</a><a data-t="radio">Radio</a>
+              </div>
+              <div class="fx-sp"></div>
+              <div class="fx-search">⌕</div><div class="fx-av"></div>
+            </div>
+            <div class="fx-hero">
+              <div class="fx-hero-bg" id="fxBg"></div>
+              <div class="fx-hero-c">
+                <span class="fx-badge"><b></b><span id="fxBadge">EN DIRECT · 12,4k spectateurs</span></span>
+                <h3 id="fxTitle">Les Nuits d'Alger</h3>
+                <div class="fx-meta" id="fxMeta"><span>2026</span><span>·</span><span>Série</span><span>·</span><span>Saison 2</span><span>·</span><span>16+</span></div>
+                <p id="fxDesc">Une ville, mille histoires. Entre la Casbah et le front de mer, cinq destins se croisent le temps d'un été brûlant.</p>
+                <div class="fx-btns"><button class="fx-btn">▶ Regarder</button><button class="fx-btn alt">+ Ma liste</button></div>
+              </div>
+              <div class="fx-dots" id="fxDots"></div>
+            </div>
+            <div id="fxRows"></div>
+            <div class="fx-foot">© 2026 Flux+ · Concept de page d'accueil réalisé par Atelier Duo · Les contenus sont fictifs.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="demo-notes">
+      <div class="note rv"><b>Carrousel automatique</b><p>Le bandeau change toutes les 6 s, avec navigation par points et transitions fluides.</p></div>
+      <div class="note rv"><b>Filtres instantanés</b><p>Les onglets filtrent le contenu sans recharger la page — exactement comme une app.</p></div>
+      <div class="note rv"><b>Responsive natif</b><p>Testez les 3 formats : la mise en page s'adapte à la largeur réelle du conteneur.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- PROCESS -->
+<section id="process" style="padding-top:0">
+  <div class="wrap">
+    <div class="sec-head rv">
+      <div><span class="kicker mono">( Méthode )</span>
+      <h2>Cinq étapes, <span class="serif">aucune surprise.</span></h2></div>
+      <p>Vous validez chaque étape avant la suivante. Un point d'avancement chaque semaine.</p>
+    </div>
+    <div class="steps">
+      <div class="stp rv"><span class="no">01</span><h4>Écoute</h4><p>Appel découverte, objectifs, cible, concurrents, contenus existants.</p><span class="d">≈ 1 jour</span></div>
+      <div class="stp rv"><span class="no">02</span><h4>Stratégie & contenu</h4><p>Arborescence, rédaction des textes, plan SEO, devis détaillé.</p><span class="d">≈ 3–5 jours</span></div>
+      <div class="stp rv"><span class="no">03</span><h4>Design</h4><p>Identité et maquettes Figma desktop + mobile. Deux allers-retours inclus.</p><span class="d">≈ 1–2 semaines</span></div>
+      <div class="stp rv"><span class="no">04</span><h4>Développement</h4><p>Intégration, back-office, tests sur tous les écrans, optimisation vitesse.</p><span class="d">≈ 2–4 semaines</span></div>
+      <div class="stp rv"><span class="no">05</span><h4>Lancement & suivi</h4><p>Mise en ligne, formation, maintenance et évolutions à la demande.</p><span class="d">continu</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- STATS -->
+<section style="padding-top:0">
+  <div class="wrap">
+    <div class="stats">
+      <div class="stat rv"><b data-count="30">0</b><span>marques accompagnées</span></div>
+      <div class="stat rv"><b data-count="15">0</b><span>sites & apps en ligne</span></div>
+      <div class="stat rv"><b data-count="3">0</b><span>langues : FR · AR · EN</span></div>
+      <div class="stat rv"><b>100%</b><span>sur mesure, aucun template</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- CONFIGURATOR -->
+<section id="projet" style="padding-top:0">
+  <div class="wrap">
+    <div class="sec-head rv">
+      <div><span class="kicker mono">( Votre projet )</span>
+      <h2>Composez votre projet <span class="serif">en 60 secondes.</span></h2></div>
+      <p>Cochez ce dont vous avez besoin : on vous répond sous 24 h avec une proposition claire.</p>
+    </div>
+    <div class="config">
+      <form class="panel rv" id="cfg" onsubmit="return false">
+        <div class="q">
+          <span class="ql">Vous souhaitez…</span>
+          <div class="opts" data-name="goal">
+            <label class="opt"><input type="radio" name="goal" value="Créer un nouveau site" checked><span>Créer un site</span></label>
+            <label class="opt"><input type="radio" name="goal" value="Refaire mon site actuel"><span>Refaire mon site</span></label>
+            <label class="opt"><input type="radio" name="goal" value="Créer une application mobile"><span>Une app mobile</span></label>
+            <label class="opt"><input type="radio" name="goal" value="Créer ma marque"><span>Créer ma marque</span></label>
+          </div>
+        </div>
+        <div class="q">
+          <span class="ql">Services <small>plusieurs choix possibles</small></span>
+          <div class="opts">
+            <label class="opt"><input type="checkbox" name="svc" value="Rédaction & contenu" data-w="1"><span>✍︎ Rédaction</span></label>
+            <label class="opt"><input type="checkbox" name="svc" value="Logo & identité" data-w="2"><span>◎ Logo & identité</span></label>
+            <label class="opt"><input type="checkbox" name="svc" value="Web design (maquettes)" data-w="2" checked><span>▦ Web design</span></label>
+            <label class="opt"><input type="checkbox" name="svc" value="Développement web" data-w="3" checked><span>&lt;/&gt; Développement</span></label>
+            <label class="opt"><input type="checkbox" name="svc" value="E-commerce" data-w="3"><span>🛒 E-commerce</span></label>
+            <label class="opt"><input type="checkbox" name="svc" value="Application Flutter" data-w="4"><span>◢ App Flutter</span></label>
+            <label class="opt"><input type="checkbox" name="svc" value="Social media" data-w="1"><span>♥ Social media</span></label>
+            <label class="opt"><input type="checkbox" name="svc" value="Print & packaging" data-w="1"><span>▤ Print</span></label>
+          </div>
+        </div>
+        <div class="q">
+          <span class="ql">Délai souhaité</span>
+          <div class="opts">
+            <label class="opt"><input type="radio" name="delay" value="Urgent (< 2 semaines)"><span>Urgent</span></label>
+            <label class="opt"><input type="radio" name="delay" value="1 mois" checked><span>1 mois</span></label>
+            <label class="opt"><input type="radio" name="delay" value="2–3 mois"><span>2–3 mois</span></label>
+            <label class="opt"><input type="radio" name="delay" value="Flexible"><span>Flexible</span></label>
+          </div>
+        </div>
+        <div class="q row2">
+          <div><label for="fName" class="ql">Votre nom / entreprise</label><input id="fName" class="field" placeholder="Ex. Niya Food"/></div>
+          <div><label for="fSite" class="ql">Site actuel (si refonte)</label><input id="fSite" class="field" placeholder="www.exemple.dz"/></div>
+        </div>
+        <div class="q" style="margin-bottom:0">
+          <label for="fMsg" class="ql">En deux mots</label>
+          <textarea id="fMsg" class="field" placeholder="Votre activité, votre cible, vos idées…"></textarea>
+        </div>
+      </form>
+      <aside class="panel recap rv">
+        <span class="mono" style="color:var(--lime)">Récapitulatif</span>
+        <h3 id="rGoal">Créer un nouveau site</h3>
+        <p class="sub">Ampleur estimée du projet</p>
+        <div class="meter"><i id="rMeter"></i></div>
+        <ul id="rList"></ul>
+        <a class="btn btn-lime" id="rWa" target="_blank" rel="noopener">Envoyer sur WhatsApp →</a>
+        <a class="btn btn-out" id="rMail">Envoyer par e-mail</a>
+      </aside>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section style="padding-top:0">
+  <div class="wrap">
+    <div class="sec-head rv"><div><span class="kicker mono">( Questions )</span><h2>Vous vous <span class="serif">demandez…</span></h2></div></div>
+    <div class="faq rv">
+      <details open><summary>Combien coûte un site ?</summary><p>Tout dépend du périmètre : un site vitrine de quelques pages n'a pas le même budget qu'une plateforme e-commerce ou une application. Après l'appel découverte, vous recevez un devis détaillé, ligne par ligne, sans frais cachés.</p></details>
+      <details><summary>Pourrai-je modifier mon site moi-même ?</summary><p>Oui. Selon le projet, on vous livre un back-office simple (WordPress, Laravel ou interface sur mesure) et une courte formation pour gérer textes, images et produits.</p></details>
+      <details><summary>Vous fournissez aussi les textes et les photos ?</summary><p>Oui : la rédaction fait partie de nos services (FR, AR, EN). Pour les visuels, on crée des mises en scène produits, des mockups et des visuels de campagne.</p></details>
+      <details><summary>Je n'ai pas encore de logo, par où commencer ?</summary><p>Par l'identité : logo, couleurs et typographies. Elle guide ensuite le site, les réseaux et le print — c'est exactement la démarche suivie pour Niya Food ou Grandiose.</p></details>
+      <details><summary>Et après la mise en ligne ?</summary><p>Hébergement, sauvegardes, mises à jour de sécurité et petites évolutions : on propose une maintenance mensuelle ou à la demande.</p></details>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section class="big-cta" id="contact">
+  <div class="wrap">
+    <span class="kicker mono">( Contact )</span>
+    <h2>Parlons de<br/><span class="serif">votre projet.</span></h2>
+    <div class="hero-cta" style="margin-top:36px">
+      <a href="https://wa.me/213794759598" target="_blank" rel="noopener" class="btn btn-ink">WhatsApp · +213 794 75 95 98</a>
+      <a href="tel:+213794759598" class="btn btn-ghost">Appeler</a>
+      <a href="mailto:imanemersaoui7@gmail.com?subject=Projet%20web" class="btn btn-ghost">✉ imanemersaoui7@gmail.com</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap foot">
+    <span>© 2026 Atelier Duo — Design, contenu & développement · Alger</span>
+    <span><a href="index.html">Portfolio développement</a> · <a href="#top">Haut de page ↑</a></span>
+  </div>
+</footer>
+
+<div class="lb" id="lb" role="dialog" aria-modal="true">
+  <button class="x" aria-label="Fermer">✕</button><button class="p" aria-label="Précédent">←</button><button class="n" aria-label="Suivant">→</button>
+  <img alt=""/><div class="c"></div>
+</div>
+
+<script>
+const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
+const S='assets/studio/';
+
+/* THEME */
+try{const t=localStorage.getItem('duo-theme');if(t)document.documentElement.dataset.theme=t}catch(e){}
+$('#theme').onclick=()=>{const d=document.documentElement,n=d.dataset.theme==='dark'?'light':'dark';d.dataset.theme=n;try{localStorage.setItem('duo-theme',n)}catch(e){}};
+$('#burger').onclick=()=>$('#nav').classList.toggle('open');
+$$('.nav ul a').forEach(a=>a.onclick=()=>$('#nav').classList.remove('open'));
+
+/* COMPARE SLIDER */
+(()=>{const c=$('#compare');let drag=false;
+ const set=e=>{const r=c.getBoundingClientRect();const x=((e.clientX-r.left)/r.width)*100;c.style.setProperty('--pos',Math.max(0,Math.min(100,x))+'%')};
+ c.addEventListener('pointerdown',e=>{drag=true;c.setPointerCapture(e.pointerId);set(e)});
+ c.addEventListener('pointermove',e=>{if(drag)set(e)});
+ c.addEventListener('pointerup',()=>drag=false);
+})();
+
+/* WORK DATA */
+const CATS={brand:'Branding',social:'Social media',pack:'Packaging',print:'Print',web:'Sites web',app:'Applications'};
+const W=[
+ {c:'brand',i:'niya-fabric',t:'Niya Food',s:'Identité de marque complète'},
+ {c:'web',u:'https://isopro-industrie.dz/',d:'isopro-industrie.dz',t:'Isopro Industrie',s:'Isolation industrielle · FR / EN / AR',img:'isopro'},
+ {c:'web',u:'https://palmary.onrender.com/',d:'palmary.onrender.com',t:'Palmary',s:'Site institutionnel'},
+ {c:'social',i:'orium-grid',t:'Orium Studio',s:'Feed Instagram premium'},
+ {c:'brand',i:'grandiose-emboss',t:'Grandiose',s:'Refonte identitaire luxe · Paris'},
+ {c:'pack',i:'pkg-classic',t:'Niya — gamme Classique',s:'Étiquettes & mise en scène'},
+ {c:'app',i:'../Plan de travail 1 copie 7.jpg',t:'Ooredoo',s:'Application interne'},
+ {c:'brand',i:'logos',t:'Logofolio',s:'11 logos, secteurs variés'},
+ {c:'social',i:'okko',t:'OKKO Services',s:'Campagne aide à domicile'},
+ {c:'web',u:'https://karaclinique.com/',d:'karaclinique.com',t:'Kara Clinique',s:'Site médical'},
+ {c:'print',i:'rollups',t:'Roll-ups',s:'Niya · Zaza Lush · GMS · Tourham'},
+ {c:'pack',i:'pkg-dark-saffron',t:'Niya — gamme VIP',s:'Safran qualité premium'},
+ {c:'brand',i:'grandiose-satin',t:'Grandiose',s:'Monogramme'},
+ {c:'social',i:'ramadan',t:'Niya — Ramadan',s:'Campagne saisonnière en arabe'},
+ {c:'web',u:'https://amchamfrance.org/',d:'amchamfrance.org',t:'AMCHAM France',s:'Site institutionnel & événements'},
+ {c:'print',i:'catalogue-a',t:'Catalogue Niya',s:'Catalogue produits bilingue'},
+ {c:'brand',i:'niya-card',t:'Niya Food',s:'Carte de visite'},
+ {c:'app',i:'../renault app.jpg',t:'Renault',s:'Refonte charte & back-end'},
+ {c:'social',i:'vip-argan',t:'Niya VIP',s:'« L\'or liquide du Maroc »'},
+ {c:'pack',i:'pkg-amlou',t:'Amlou aux amandes',s:'Packaging naturel & bio'},
+ {c:'web',u:'https://palmaryfood.com/',d:'palmaryfood.com',t:'Palmary Food',s:'Catalogue produits'},
+ {c:'print',i:'flyers',t:'Flyers',s:'Niall · OKKO · BEA · GMS · Tourham'},
+ {c:'brand',i:'grandiose-anatomy',t:'Grandiose',s:'Anatomie du logo'},
+ {c:'social',i:'grandiose-social',t:'Grandiose',s:'Social media gastronomie'},
+ {c:'pack',i:'pkg-dark-argan',t:'Huile d\'argan VIP',s:'Bouteille premium'},
+ {c:'web',u:'https://southandglobal.group/',d:'southandglobal.group',t:'South & Global Partners',s:'Asset management · marchés frontières',img:'southglobal'},
+ {c:'print',i:'depliant',t:'Tourham',s:'Dépliant cabinet d\'avocats'},
+ {c:'app',i:'../covoiturage app.PNG',t:'Covoiturage',s:'App collaborateurs'},
+ {c:'brand',i:'niya-tote',t:'Niya Food',s:'Tote bag'},
+ {c:'social',i:'grandiose-stories',t:'Grandiose',s:'Stories'},
+ {c:'print',i:'blocnote',t:'GMS',s:'Bloc-notes corporate'},
+ {c:'pack',i:'pkg-saffron',t:'Safran Niya',s:'Packaging gamme classique'},
+ {c:'brand',i:'grandiose-coasters',t:'Grandiose',s:'Sous-verres'},
+ {c:'web',u:'https://vanmeester.com/',d:'vanmeester.com',t:'Van Meester',s:'Site institutionnel'},
+ {c:'app',u:'https://jowplus.com/',d:'jowplus.com',t:'JowPlus',s:'Plateforme de streaming'},
+ {c:'print',i:'catalogue-b',t:'Catalogue Niya',s:'Double page Amlou'},
+ {c:'web',u:'https://amoudaciment.dz/',d:'amoudaciment.dz',t:'Amoud Ciment',s:'Site institutionnel'},
+ {c:'social',i:'amlou-post',t:'Niya Food',s:'Post produit'},
+ {c:'web',u:'https://metmland.org/',d:'metmland.org',t:'MetmLand',s:'Plateforme en ligne'},
+];
+const grid=$('#grid'),filters=$('#filters');
+const src=w=>w.i.startsWith('../')?encodeURI('assets/'+w.i.slice(3)):S+w.i+'.jpg';
+W.forEach((w,k)=>{
+  const el=document.createElement(w.u?'a':'div');
+  el.className='item'+(w.u?' web':'');el.dataset.c=w.c;el.tabIndex=0;
+  if(w.u){el.href=w.u;el.target='_blank';el.rel='noopener';
+    el.innerHTML=`<div class="browser"><div class="bbar"><i></i><i></i><i></i><span>${w.d}</span></div><div class="shot"${w.img?' style="aspect-ratio:auto"':''}><img loading="lazy" alt="${w.t}" src="${w.img?S+w.img+'.jpg':'https://image.thum.io/get/width/900/crop/560/'+w.u}" onerror="this.parentElement.textContent='↗ ${w.d}'"></div></div>`;
+  }else{
+    el.innerHTML=`<img loading="lazy" alt="${w.t} — ${w.s}" src="${src(w)}">`;
+    el.dataset.k=k;
+  }
+  el.insertAdjacentHTML('beforeend',`<div class="cap"><div><b>${w.t}</b><small>${w.s}</small></div><span class="t">${w.u?'Visiter ↗':CATS[w.c]}</span></div>`);
+  grid.appendChild(el);
+});
+[['all','Tout'],...Object.entries(CATS)].forEach(([k,v],j)=>{
+  const b=document.createElement('button');b.className='filter'+(j?'':' on');b.textContent=v;
+  b.onclick=()=>{$$('.filter').forEach(x=>x.classList.remove('on'));b.classList.add('on');
+    $$('.item').forEach(it=>{it.classList.toggle('hide',k!=='all'&&it.dataset.c!==k)})};
+  filters.appendChild(b);
+});
+
+/* LIGHTBOX */
+const lb=$('#lb'),lbImg=lb.querySelector('img'),lbC=lb.querySelector('.c');let cur=0;
+const visible=()=>$$('.item:not(.hide):not(.web)');
+const show=i=>{const v=visible();cur=(i+v.length)%v.length;const w=W[v[cur].dataset.k];lbImg.src=src(w);lbImg.alt=w.t;lbC.textContent=`${w.t} — ${w.s}`};
+grid.addEventListener('click',e=>{const it=e.target.closest('.item:not(.web)');if(!it)return;show(visible().indexOf(it));lb.classList.add('on')});
+grid.addEventListener('keydown',e=>{if(e.key==='Enter'){const it=e.target.closest('.item:not(.web)');if(it){show(visible().indexOf(it));lb.classList.add('on')}}});
+lb.querySelector('.x').onclick=()=>lb.classList.remove('on');
+lb.querySelector('.p').onclick=()=>show(cur-1);lb.querySelector('.n').onclick=()=>show(cur+1);
+lb.onclick=e=>{if(e.target===lb)lb.classList.remove('on')};
+addEventListener('keydown',e=>{if(!lb.classList.contains('on'))return;if(e.key==='Escape')lb.classList.remove('on');if(e.key==='ArrowLeft')show(cur-1);if(e.key==='ArrowRight')show(cur+1)});
+
+/* CASE STUDY */
+const CS=[
+ ['01 · Logo','niya-fabric','Le symbole','Un loup et une plante réunis dans un sceau ovale : force, nature et authenticité.'],
+ ['02 · Identité','niya-argan','Couleurs & typo','Verts profonds, beige naturel, Monda + Poppins pour un ton artisanal et moderne.'],
+ ['03 · Papeterie','niya-stationery','Supports corporate','En-tête, cartes, chemises : la marque prend corps sur chaque document.'],
+ ['04 · Packaging','pkg-classic','Gamme Classique','Étiquettes claires et gourmandes pour l\'amlou, les huiles, le safran et le miel.'],
+ ['05 · Gamme VIP','pkg-premium','Montée en gamme','Fonds sombres, dorures et gravures végétales pour le segment premium.'],
+ ['06 · Social media','niya-insta','Réseaux sociaux','Templates Instagram cohérents, posts produits et campagnes saisonnières.'],
+ ['07 · Print','catalogue-a','Catalogue bilingue','Catalogue FR/AR mettant en scène chaque produit dans son terroir.'],
+ ['08 · Événementiel','niya-rollup','Roll-up salon','« Le luxe au naturel » : un support grand format pour les salons.'],
+];
+$('#hscroll').innerHTML=CS.map(c=>`<article class="h-card"><img loading="lazy" src="${S+c[1]}.jpg" alt="${c[2]}"><div><span class="step">${c[0]}</span><h4>${c[2]}</h4><p>${c[3]}</p></div></article>`).join('');
+const hs=$('#hscroll');$('#cNext').onclick=()=>hs.scrollBy({left:440,behavior:'smooth'});$('#cPrev').onclick=()=>hs.scrollBy({left:-440,behavior:'smooth'});
+
+/* FLUX+ DEMO */
+$$('#devSeg button').forEach(b=>b.onclick=()=>{$$('#devSeg button').forEach(x=>x.classList.remove('on'));b.classList.add('on');$('#device').className='device '+b.dataset.d});
+const G=(a,b,c)=>`radial-gradient(circle at 30% 20%,${c||'rgba(255,255,255,.35)'},transparent 40%),linear-gradient(150deg,${a},${b})`;
+const FEAT=[
+ {t:"Les Nuits d'Alger",m:['2026','Série','Saison 2','16+'],d:"Une ville, mille histoires. Entre la Casbah et le front de mer, cinq destins se croisent le temps d'un été brûlant.",b:'EN DIRECT · 12,4k spectateurs',o:['#7C5CFF','#FF4D1C']},
+ {t:'Sahara Signal',m:['2025','Film','1h52','Thriller'],d:"Une ingénieure capte un signal impossible au cœur du désert. Le temps est compté avant que d'autres ne le trouvent.",b:'NOUVEAU · Exclusivité Flux+',o:['#00E0B8','#3B5BFF']},
+ {t:'Derby Live',m:['Ce soir','21:00','Sport','HD'],d:"Le grand classique en direct avec commentaires, statistiques en temps réel et replay instantané.",b:'EN DIRECT · 48,9k spectateurs',o:['#FF3B5C','#FFB800']},
+];
+const ITEMS=[
+ {t:'Les Nuits d\'Alger',k:'serie',g:['#2b1055','#7597de'],e:'S2'},{t:'Sahara Signal',k:'film',g:['#f7971e','#8e2de2'],e:'4K'},
+ {t:'Médina',k:'serie',g:['#0f2027','#2c7744'],e:'NEW'},{t:'Derby Live',k:'live',g:['#c31432','#240b36'],e:'LIVE'},
+ {t:'Le Dernier Port',k:'film',g:['#1e3c72','#2a5298'],e:'HD'},{t:'Cuisine du Bled',k:'serie',g:['#ee9ca7','#c94b4b'],e:'S1'},
+ {t:'JT 20h',k:'live',g:['#232526','#5b6a7a'],e:'LIVE'},{t:'Atlas',k:'film',g:['#614385','#516395'],e:'4K'},
+ {t:'Tech Talk DZ',k:'live',g:['#00b09b','#3a1c71'],e:'LIVE'},{t:'Kasbah Blues',k:'serie',g:['#ff6e7f','#3d1f5c'],e:'NEW'},
+ {t:'Horizon',k:'film',g:['#11998e','#0b3d2e'],e:'HD'},{t:'Concert Raï',k:'live',g:['#fc4a1a','#4a0d4f'],e:'LIVE'},
+];
+const RADIO=[['Flux Radio','Hits non-stop','#7C5CFF'],['Raï Classics','Les légendes','#FF4D1C'],['Chill Lo-Fi','Pour travailler','#00E0B8'],['Talk Info','Actualités 24/7','#FFB800'],['Andalou','Musique traditionnelle','#3B5BFF'],['Sport FM','Matchs en direct','#FF3B5C']];
+let fi=0,fTimer;
+const dots=$('#fxDots');FEAT.forEach((_,i)=>{const d=document.createElement('i');d.onclick=()=>{feat(i);restart()};dots.appendChild(d)});
+function feat(i){fi=i;const f=FEAT[i];$('#fxTitle').textContent=f.t;$('#fxDesc').textContent=f.d;$('#fxBadge').textContent=f.b;
+ $('#fxMeta').innerHTML=f.m.map((x,j)=>(j?'<span>·</span>':'')+`<span>${x}</span>`).join('');
+ $('#fxBg').innerHTML=`<span class="fx-orb" style="width:340px;height:340px;right:-40px;top:-60px;background:${f.o[0]}"></span><span class="fx-orb" style="width:260px;height:260px;right:220px;top:120px;background:${f.o[1]};animation-delay:-4s"></span>`;
+ $('#fxBg').style.background=`linear-gradient(120deg,#07070c 30%,${f.o[0]}33)`;
+ $$('#fxDots i').forEach((d,j)=>d.classList.toggle('on',j===i));}
+function restart(){clearInterval(fTimer);fTimer=setInterval(()=>feat((fi+1)%FEAT.length),6000)}
+const card=(x,wide)=>`<div class="fx-card"><div class="g" style="background:${G(x.g[0],x.g[1])}"></div><em>${x.e}</em><span>${x.t}</span>${wide?`<i class="fx-prog" style="width:${20+Math.round(Math.random()*70)}%"></i>`:''}</div>`;
+function rows(tab){
+ const R=$('#fxRows');let h='';
+ const sel=tab==='all'?ITEMS:ITEMS.filter(x=>x.k===tab);
+ if(tab==='all'){
+  h+=`<div class="fx-row fx-wide"><h5>Reprendre la lecture <small>3 en cours</small></h5><div class="fx-rail">${ITEMS.slice(0,4).map(x=>card(x,1)).join('')}</div></div>`;
+  h+=`<div class="fx-row"><h5>Tendances en Algérie <small>Voir tout →</small></h5><div class="fx-rail">${[...ITEMS].reverse().map(x=>card(x)).join('')}</div></div>`;
+  h+=`<div class="fx-row"><h5>Radios en direct <small>${RADIO.length} stations</small></h5><div class="fx-radio">${RADIO.map(radio).join('')}</div></div>`;
+ }else if(tab==='radio'){
+  h+=`<div class="fx-row"><h5>Toutes les radios <small>Cliquez pour écouter</small></h5><div class="fx-radio">${RADIO.map(radio).join('')}</div></div>`;
+ }else{
+  h+=`<div class="fx-row"><h5>${{serie:'Séries',film:'Films',live:'En direct maintenant'}[tab]} <small>${sel.length} titres</small></h5><div class="fx-rail">${sel.map(x=>card(x,tab==='live')).join('')}</div></div>`;
+ }
+ R.innerHTML=h;
+ $$('.fx-st').forEach(s=>s.onclick=()=>{const on=s.classList.contains('on');$$('.fx-st').forEach(x=>x.classList.remove('on'));if(!on)s.classList.add('on')});
+}
+const radio=r=>`<div class="fx-st"><i style="background:linear-gradient(135deg,${r[2]},#07070c)"></i><div><b>${r[0]}</b><small>${r[1]}</small></div><span class="fx-eq"><s></s><s></s><s></s></span></div>`;
+$$('#fxTabs a').forEach(a=>a.onclick=()=>{$$('#fxTabs a').forEach(x=>x.classList.remove('on'));a.classList.add('on');rows(a.dataset.t)});
+feat(0);restart();rows('all');
+
+/* CONFIGURATOR */
+const PHONE='213794759598',MAIL='imanemersaoui7@gmail.com';
+function recap(){
+ const f=$('#cfg');const goal=f.querySelector('[name=goal]:checked').value;
+ const svc=$$('#cfg [name=svc]:checked');const delay=f.querySelector('[name=delay]:checked').value;
+ const name=$('#fName').value.trim(),site=$('#fSite').value.trim(),msg=$('#fMsg').value.trim();
+ $('#rGoal').textContent=goal;
+ const w=svc.reduce((a,b)=>a+ +b.dataset.w,0);$('#rMeter').style.width=Math.min(100,w/17*100+8)+'%';
+ const li=[['Services',svc.length?svc.map(s=>s.value).join(', '):'<span class="empty">à définir</span>'],['Délai',delay]];
+ if(name)li.unshift(['Client',name]);if(site)li.push(['Site actuel',site]);
+ $('#rList').innerHTML=li.map(l=>`<li><span>${l[0]}</span><span>${l[1].replace(/</g,(m,i,s)=>s.startsWith('<span')?m:'&lt;')}</span></li>`).join('');
+ const text=`Bonjour Atelier Duo 👋\n\nObjectif : ${goal}\nServices : ${svc.map(s=>s.value).join(', ')||'à définir'}\nDélai : ${delay}${name?`\nClient : ${name}`:''}${site?`\nSite actuel : ${site}`:''}${msg?`\n\n${msg}`:''}`;
+ $('#rWa').href=`https://wa.me/${PHONE}?text=${encodeURIComponent(text)}`;
+ $('#rMail').href=`mailto:${MAIL}?subject=${encodeURIComponent('Projet — '+goal)}&body=${encodeURIComponent(text)}`;
+}
+$('#cfg').addEventListener('input',recap);$('#cfg').addEventListener('change',recap);recap();
+
+/* REVEAL + COUNTERS */
+const io=new IntersectionObserver(es=>es.forEach(e=>{if(!e.isIntersecting)return;e.target.classList.add('in');io.unobserve(e.target);
+ const c=e.target.querySelector('[data-count]');if(c){const n=+c.dataset.count;let v=0;const t=setInterval(()=>{v++;c.textContent=v+(n>9?'+':'');if(v>=n)clearInterval(t)},1200/n)}}),{threshold:.12});
+$$('.rv,.item').forEach(el=>io.observe(el));
+</script>
+</body>
+</html>
