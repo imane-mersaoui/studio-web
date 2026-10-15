@@ -1,0 +1,2191 @@
+<!DOCTYPE html>
+<html lang="fr" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Portfolio — Développeur Web</title>
+  <style>
+    /* ─── THEME VARIABLES ─── */
+    :root {
+      --accent: #6366f1;
+      --accent2: #8b5cf6;
+      --accent-glow: rgba(99,102,241,0.35);
+    }
+
+    [data-theme="dark"] {
+      --bg:        #0f0f13;
+      --bg2:       #13131a;
+      --bg3:       rgba(255,255,255,0.03);
+      --border:    rgba(255,255,255,0.08);
+      --border-h:  rgba(99,102,241,0.35);
+      --text:      #e8e8f0;
+      --text2:     #9ca3af;
+      --text3:     #4b5563;
+      --pill-bg:   rgba(255,255,255,0.05);
+      --pill-b:    rgba(255,255,255,0.1);
+      --card-sh:   rgba(0,0,0,0.5);
+      --nav-bg:    rgba(15,15,19,0.8);
+      --toggle-bg: rgba(255,255,255,0.08);
+    }
+
+    [data-theme="light"] {
+      --bg:        #f5f5fa;
+      --bg2:       #ffffff;
+      --bg3:       rgba(0,0,0,0.03);
+      --border:    rgba(0,0,0,0.08);
+      --border-h:  rgba(99,102,241,0.4);
+      --text:      #1a1a2e;
+      --text2:     #6b7280;
+      --text3:     #9ca3af;
+      --pill-bg:   rgba(0,0,0,0.04);
+      --pill-b:    rgba(0,0,0,0.1);
+      --card-sh:   rgba(99,102,241,0.1);
+      --nav-bg:    rgba(245,245,250,0.85);
+      --toggle-bg: rgba(0,0,0,0.06);
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      transition: background 0.4s, color 0.4s;
+      overflow-x: hidden;
+    }
+
+    /* ─── CURSOR GLOW ─── */
+    .cursor-glow {
+      position: fixed;
+      width: 400px;
+      height: 400px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(99,102,241,0.07) 0%, transparent 70%);
+      pointer-events: none;
+      transform: translate(-50%, -50%);
+      z-index: 0;
+      transition: opacity 0.3s;
+    }
+
+    /* ─── NOISE OVERLAY ─── */
+    body::after {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 1000;
+      opacity: 0.4;
+    }
+
+    /* ─── NAV ─── */
+    .nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 900;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px 32px;
+      background: var(--nav-bg);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border);
+      transition: background 0.4s, border-color 0.4s;
+    }
+
+    .nav-logo {
+      font-size: 16px;
+      font-weight: 800;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      letter-spacing: -0.5px;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 32px;
+      list-style: none;
+    }
+
+    .nav-links a {
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--text2);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    .nav-links a:hover { color: var(--text); }
+
+    .nav-right {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    /* ─── THEME TOGGLE ─── */
+    .theme-toggle {
+      position: relative;
+      width: 52px;
+      height: 28px;
+      background: var(--toggle-bg);
+      border: 1px solid var(--border);
+      border-radius: 100px;
+      cursor: pointer;
+      transition: background 0.3s, border-color 0.3s;
+      flex-shrink: 0;
+    }
+
+    .theme-toggle-knob {
+      position: absolute;
+      top: 3px;
+      left: 3px;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      transition: transform 0.35s cubic-bezier(0.34,1.56,0.64,1);
+      box-shadow: 0 2px 8px var(--accent-glow);
+    }
+
+    [data-theme="light"] .theme-toggle-knob {
+      transform: translateX(24px);
+    }
+
+    /* ─── HERO ─── */
+    .hero {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      padding: 100px 24px 80px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Animated gradient orbs */
+    .orb {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(80px);
+      pointer-events: none;
+      animation: float 8s ease-in-out infinite;
+    }
+
+    .orb-1 {
+      width: 500px; height: 500px;
+      background: radial-gradient(circle, rgba(99,102,241,0.18) 0%, transparent 70%);
+      top: 10%; left: 20%;
+      animation-delay: 0s;
+    }
+
+    .orb-2 {
+      width: 400px; height: 400px;
+      background: radial-gradient(circle, rgba(139,92,246,0.14) 0%, transparent 70%);
+      bottom: 15%; right: 15%;
+      animation-delay: -3s;
+    }
+
+    .orb-3 {
+      width: 300px; height: 300px;
+      background: radial-gradient(circle, rgba(59,130,246,0.1) 0%, transparent 70%);
+      top: 50%; left: 60%;
+      animation-delay: -6s;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0) scale(1); }
+      33%       { transform: translateY(-30px) scale(1.05); }
+      66%       { transform: translateY(20px) scale(0.97); }
+    }
+
+    /* Grid lines background */
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(var(--border) 1px, transparent 1px),
+        linear-gradient(90deg, var(--border) 1px, transparent 1px);
+      background-size: 60px 60px;
+      mask-image: radial-gradient(ellipse 80% 70% at 50% 50%, black 30%, transparent 100%);
+      -webkit-mask-image: radial-gradient(ellipse 80% 70% at 50% 50%, black 30%, transparent 100%);
+      opacity: 0.4;
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 100%;
+      max-width: 100%;
+      overflow: hidden;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(99,102,241,0.12);
+      border: 1px solid rgba(99,102,241,0.35);
+      color: #a5b4fc;
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      padding: 7px 18px;
+      border-radius: 100px;
+      margin-bottom: 36px;
+      animation: fadeDown 0.7s ease both;
+    }
+
+    .badge-dot {
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: #34d399;
+      animation: pulse 1.5s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; box-shadow: 0 0 0 0 rgba(52,211,153,0.4); }
+      50%       { opacity: 0.6; box-shadow: 0 0 0 6px rgba(52,211,153,0); }
+    }
+
+    @keyframes fadeDown {
+      from { opacity: 0; transform: translateY(-16px); }
+      to   { opacity: 1; transform: none; }
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to   { opacity: 1; transform: none; }
+    }
+
+    .hero h1 {
+      font-size: clamp(1.55rem, 5vw, 4.2rem);
+      font-weight: 800;
+      line-height: 1.15;
+      max-width: 760px;
+      background: linear-gradient(270deg, #6366f1, #8b5cf6, #e8e8f0, #6366f1);
+      background-size: 300% 300%;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 24px;
+      animation: fadeUp 0.7s 0.15s ease both, gradientShift 6s ease infinite;
+    }
+
+    [data-theme="light"] .hero h1 {
+      background: linear-gradient(270deg, #4f46e5, #7c3aed, #1a1a2e, #4f46e5);
+      background-size: 300% 300%;
+      -webkit-background-clip: text;
+      background-clip: text;
+      animation: fadeUp 0.7s 0.15s ease both, gradientShift 6s ease infinite;
+    }
+
+    @keyframes gradientShift {
+      0%   { background-position: 0% 50%; }
+      50%  { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    .hero p.tagline {
+      font-size: clamp(1rem, 2.5vw, 1.2rem);
+      color: var(--text2);
+      max-width: 520px;
+      line-height: 1.75;
+      margin-bottom: 52px;
+      animation: fadeUp 0.7s 0.25s ease both;
+      min-height: 2.1em;
+    }
+
+    .tagline-word {
+      display: inline-block;
+      opacity: 0;
+      transform: translateY(12px);
+      animation: wordIn 0.4s ease forwards;
+    }
+
+    @keyframes wordIn {
+      to { opacity: 1; transform: none; }
+    }
+
+    /* Cursor blink after tagline */
+    .tagline-cursor {
+      display: inline-block;
+      width: 2px;
+      height: 1em;
+      background: var(--accent);
+      vertical-align: middle;
+      margin-left: 2px;
+      border-radius: 1px;
+      animation: blink 1s step-end infinite;
+    }
+
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50%       { opacity: 0; }
+    }
+
+    /* SKILLS PILLS */
+    .skills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      justify-content: center;
+      margin-bottom: 52px;
+      animation: fadeUp 0.7s 0.35s ease both;
+    }
+
+    .skill-pill {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--pill-bg);
+      border: 1px solid var(--pill-b);
+      border-radius: 100px;
+      padding: 9px 18px;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text);
+      transition: all 0.25s;
+      cursor: default;
+    }
+
+    .skill-pill:hover {
+      background: rgba(99,102,241,0.12);
+      border-color: rgba(99,102,241,0.5);
+      color: #a5b4fc;
+      transform: translateY(-3px);
+      box-shadow: 0 8px 24px rgba(99,102,241,0.15);
+    }
+
+    .skill-dot { width: 7px; height: 7px; border-radius: 50%; }
+    .dot-js      { background: #f7df1e; }
+    .dot-react   { background: #61dafb; }
+    .dot-php     { background: #8892bf; }
+    .dot-flutter { background: #54c5f8; }
+    .dot-flutterflow { background: #9b51e0; }
+    .dot-bubble  { background: #0c67d6; }
+    .dot-nodejs  { background: #68a063; }
+    .dot-python  { background: #ffd845; }
+
+    /* MISSION */
+    .mission {
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 28px 40px;
+      max-width: 560px;
+      text-align: center;
+      animation: fadeUp 0.7s 0.45s ease both;
+      backdrop-filter: blur(10px);
+    }
+
+    .mission-icon { font-size: 28px; margin-bottom: 12px; }
+    .mission p { font-size: 15px; color: var(--text2); line-height: 1.75; }
+    .mission strong { color: var(--text); }
+
+    /* CTA */
+    .cta-row {
+      display: flex;
+      gap: 14px;
+      flex-wrap: wrap;
+      justify-content: center;
+      margin-top: 44px;
+      animation: fadeUp 0.7s 0.55s ease both;
+    }
+
+    .btn {
+      padding: 14px 28px;
+      border-radius: 14px;
+      font-size: 15px;
+      font-weight: 600;
+      text-decoration: none;
+      cursor: pointer;
+      border: none;
+      transition: all 0.25s;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .btn::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: white;
+      opacity: 0;
+      transition: opacity 0.2s;
+    }
+
+    .btn:hover::after { opacity: 0.08; }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      color: white;
+      box-shadow: 0 4px 20px var(--accent-glow);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 36px rgba(99,102,241,0.5);
+    }
+
+    .btn-ghost {
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      color: var(--text);
+    }
+
+    .btn-ghost:hover {
+      border-color: var(--border-h);
+      transform: translateY(-2px);
+    }
+
+    /* SCROLL INDICATOR */
+    .scroll-hint {
+      position: absolute;
+      bottom: 36px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      color: var(--text3);
+      font-size: 11px;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      animation: fadeUp 1s 1s ease both;
+      z-index: 2;
+    }
+
+    .scroll-line {
+      width: 1px;
+      height: 40px;
+      background: linear-gradient(to bottom, var(--accent), transparent);
+      animation: scrollLine 1.8s ease-in-out infinite;
+    }
+
+    @keyframes scrollLine {
+      0%   { transform: scaleY(0); transform-origin: top; opacity: 1; }
+      50%  { transform: scaleY(1); transform-origin: top; opacity: 1; }
+      51%  { transform: scaleY(1); transform-origin: bottom; }
+      100% { transform: scaleY(0); transform-origin: bottom; opacity: 0; }
+    }
+
+    /* ─── PROJECTS SECTION ─── */
+    #projets {
+      max-width: 1300px;
+      margin: 0 auto;
+      padding: 80px 24px 120px;
+      position: relative;
+      z-index: 2;
+    }
+
+    .section-header {
+      text-align: center;
+      margin-bottom: 56px;
+    }
+
+    .section-label {
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 2.5px;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 16px;
+      display: block;
+    }
+
+    .section-title {
+      font-size: clamp(1.8rem, 4vw, 3rem);
+      font-weight: 800;
+      background: linear-gradient(135deg, var(--text) 0%, #a5b4fc 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 14px;
+    }
+
+    .section-sub {
+      font-size: 16px;
+      color: var(--text2);
+      max-width: 440px;
+      margin: 0 auto;
+    }
+
+    /* FILTER TABS */
+    .filter-tabs {
+      display: flex;
+      gap: 8px;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-bottom: 52px;
+    }
+
+    .filter-tab {
+      padding: 9px 22px;
+      border-radius: 100px;
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      border: 1px solid var(--border);
+      background: var(--bg3);
+      color: var(--text2);
+      transition: all 0.25s;
+      backdrop-filter: blur(6px);
+    }
+
+    .filter-tab:hover {
+      background: rgba(99,102,241,0.1);
+      border-color: rgba(99,102,241,0.3);
+      color: #a5b4fc;
+      transform: translateY(-1px);
+    }
+
+    .filter-tab.active {
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      border-color: transparent;
+      color: white;
+      box-shadow: 0 4px 16px var(--accent-glow);
+    }
+
+    /* PROJECTS GRID */
+    .projects-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+      gap: 20px;
+    }
+
+    /* ─── PROJECT CARD ─── */
+    .project-card {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      overflow: hidden;
+      transition: border-color 0.3s, box-shadow 0.3s, transform 0.1s;
+      display: flex;
+      flex-direction: column;
+      will-change: transform;
+    }
+
+    .project-card:hover {
+      border-color: var(--border-h);
+      box-shadow: 0 24px 64px var(--card-sh);
+    }
+
+    .project-card.hidden { display: none; }
+
+    /* CARD MEDIA */
+    .card-media {
+      width: 100%;
+      aspect-ratio: 16/9;
+      background: var(--bg3);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .card-media img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: top;
+      display: block;
+      transition: transform 0.5s ease;
+    }
+
+    .project-card:hover .card-media img { transform: scale(1.04); }
+
+    .card-media video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    /* Browser frame */
+    .browser-frame {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      background: var(--bg);
+    }
+
+    .browser-bar {
+      background: rgba(128,128,128,0.08);
+      padding: 8px 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      border-bottom: 1px solid var(--border);
+      flex-shrink: 0;
+    }
+
+    .browser-dots { display: flex; gap: 5px; }
+    .browser-dot  { width: 8px; height: 8px; border-radius: 50%; }
+    .browser-dot:nth-child(1) { background: #ff5f57; }
+    .browser-dot:nth-child(2) { background: #febc2e; }
+    .browser-dot:nth-child(3) { background: #28c840; }
+
+    .browser-url {
+      flex: 1;
+      background: rgba(128,128,128,0.08);
+      border-radius: 6px;
+      padding: 4px 10px;
+      font-size: 11px;
+      color: var(--text3);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .browser-content {
+      flex: 1;
+      overflow: hidden;
+    }
+
+    .browser-content img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: top;
+      transition: transform 0.5s ease;
+      display: block;
+    }
+
+    .project-card:hover .browser-content img { transform: scale(1.04); }
+
+    /* Live badge */
+    .live-badge {
+      position: absolute;
+      top: 12px; right: 12px;
+      background: rgba(16,185,129,0.15);
+      border: 1px solid rgba(16,185,129,0.35);
+      color: #34d399;
+      font-size: 11px;
+      font-weight: 600;
+      padding: 3px 10px;
+      border-radius: 100px;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      backdrop-filter: blur(6px);
+    }
+
+    .live-dot {
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: #34d399;
+      animation: pulse 1.5s infinite;
+    }
+
+    /* Category badge */
+    .cat-badge {
+      position: absolute;
+      top: 12px; left: 12px;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      padding: 3px 10px;
+      border-radius: 100px;
+      backdrop-filter: blur(6px);
+    }
+
+    .cat-app     { background: rgba(99,102,241,0.2); color: #a5b4fc; border: 1px solid rgba(99,102,241,0.35); }
+    .cat-web     { background: rgba(14,165,233,0.18); color: #38bdf8; border: 1px solid rgba(14,165,233,0.35); }
+    .cat-interne { background: rgba(245,158,11,0.18); color: #fbbf24; border: 1px solid rgba(245,158,11,0.35); }
+
+    /* CARD BODY */
+    .card-body {
+      padding: 22px 24px 24px;
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+      gap: 10px;
+    }
+
+    .card-title {
+      font-size: 17px;
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    .card-desc {
+      font-size: 14px;
+      color: var(--text2);
+      line-height: 1.65;
+      flex: 1;
+    }
+
+    .card-footer {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      padding-top: 14px;
+      border-top: 1px solid var(--border);
+    }
+
+    .card-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 13px;
+      font-weight: 600;
+      text-decoration: none;
+      color: var(--accent);
+      transition: color 0.2s, gap 0.2s;
+    }
+
+    .card-link:hover { color: #a5b4fc; gap: 10px; }
+    .card-link svg { width: 13px; height: 13px; }
+
+    .card-restricted {
+      font-size: 13px;
+      color: var(--text3);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    /* CAROUSEL */
+    .carousel { position: relative; width: 100%; height: 100%; overflow: hidden; }
+    .carousel-track {
+      display: flex;
+      height: 100%;
+      transition: transform 0.45s cubic-bezier(0.4,0,0.2,1);
+    }
+    .carousel-track img { width: 100%; height: 100%; object-fit: cover; object-position: top; flex-shrink: 0; }
+
+    .carousel-btn {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background: rgba(15,15,19,0.65);
+      border: 1px solid rgba(255,255,255,0.12);
+      color: white;
+      border-radius: 50%;
+      width: 32px; height: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 15px;
+      z-index: 5;
+      transition: background 0.2s, transform 0.2s;
+      backdrop-filter: blur(4px);
+    }
+
+    .carousel-btn:hover { background: var(--accent); transform: translateY(-50%) scale(1.1); }
+    .carousel-btn.prev { left: 10px; }
+    .carousel-btn.next { right: 10px; }
+
+    .carousel-dots {
+      position: absolute;
+      bottom: 10px; left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 5px;
+    }
+
+    .carousel-dot {
+      width: 6px; height: 6px;
+      border-radius: 3px;
+      background: rgba(255,255,255,0.3);
+      cursor: pointer;
+      transition: background 0.2s, width 0.2s;
+    }
+
+    .carousel-dot.active { background: #6366f1; width: 18px; }
+
+    /* Wide card */
+    .card-wide { grid-column: span 2; }
+
+    /* ─── HAMBURGER ─── */
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      justify-content: center;
+      gap: 5px;
+      width: 36px;
+      height: 36px;
+      cursor: pointer;
+      background: var(--toggle-bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 7px;
+      transition: background 0.2s;
+    }
+
+    .hamburger span {
+      display: block;
+      height: 2px;
+      background: var(--text);
+      border-radius: 2px;
+      transition: transform 0.3s, opacity 0.3s, width 0.3s;
+      transform-origin: center;
+    }
+
+    .hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+    .hamburger.open span:nth-child(2) { opacity: 0; transform: scaleX(0); }
+    .hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+    /* Mobile nav drawer */
+    .nav-drawer {
+      display: none;
+      position: fixed;
+      top: 61px; left: 0; right: 0;
+      background: var(--nav-bg);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border);
+      padding: 16px 24px 24px;
+      z-index: 800;
+      flex-direction: column;
+      gap: 4px;
+      transform: translateY(-10px);
+      opacity: 0;
+      transition: transform 0.25s ease, opacity 0.25s ease;
+    }
+
+    .nav-drawer.open {
+      transform: none;
+      opacity: 1;
+    }
+
+    .nav-drawer a {
+      display: block;
+      padding: 12px 16px;
+      font-size: 16px;
+      font-weight: 500;
+      color: var(--text2);
+      text-decoration: none;
+      border-radius: 10px;
+      transition: background 0.2s, color 0.2s;
+    }
+
+    .nav-drawer a:hover {
+      background: rgba(99,102,241,0.1);
+      color: var(--text);
+    }
+
+    /* ─── RESPONSIVE BREAKPOINTS ─── */
+
+    /* Tablet — 1024px */
+    @media (max-width: 1024px) {
+      .projects-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    /* Mobile large — 800px */
+    @media (max-width: 800px) {
+      /* Nav */
+      .nav { padding: 14px 20px; }
+      .nav-links { display: none; }
+      .hamburger { display: flex; }
+      .nav-drawer { display: flex; }
+
+      /* Hero */
+      .hero { padding: 90px 24px 70px; }
+      .hero-content { width: 100%; max-width: 100%; }
+      .hero h1 {
+        font-size: 1.9rem;
+        line-height: 1.22;
+        max-width: 100%;
+        word-break: break-word;
+        overflow-wrap: break-word;
+        padding: 0 4px;
+      }
+      .hero p.tagline { font-size: 1rem; padding: 0 4px; }
+      .mission { padding: 20px 24px; max-width: 100%; }
+      .cta-row { gap: 10px; }
+      .btn { padding: 12px 20px; font-size: 14px; }
+
+      /* Grid */
+      .card-wide { grid-column: span 1; }
+      .projects-grid { grid-template-columns: 1fr; }
+
+      /* Filter tabs — scrollable */
+      .filter-tabs {
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        justify-content: flex-start;
+        padding-bottom: 4px;
+        scrollbar-width: none;
+        -ms-overflow-style: none;
+      }
+      .filter-tabs::-webkit-scrollbar { display: none; }
+      .filter-tab { flex-shrink: 0; }
+
+      /* Section */
+      #projets { padding: 60px 16px 80px; }
+
+      /* Contact grid */
+      #contact > div > div[style*="grid-template-columns"] {
+        grid-template-columns: 1fr !important;
+      }
+
+      /* Nav right spacing */
+      .nav-right { gap: 8px; }
+      .lang-toggle { padding: 2px; }
+      .lang-btn { padding: 4px 8px; font-size: 11px; }
+    }
+
+    /* Mobile small — 480px */
+    @media (max-width: 480px) {
+      /* Nav */
+      .nav { padding: 12px 16px; }
+      .nav-logo { font-size: 14px; }
+
+      /* Hero */
+      .hero { padding: 80px 20px 56px; }
+      .hero-content { width: 100%; padding: 0 5px; }
+      .hero h1 {
+        font-size: 1.45rem;
+        line-height: 1.28;
+        max-width: 100%;
+        margin-bottom: 14px;
+        word-break: break-word;
+        overflow-wrap: break-word;
+        padding: 0;
+      }
+      .hero p.tagline {
+        font-size: 0.92rem;
+        line-height: 1.65;
+        margin-bottom: 28px;
+        padding: 0;
+      }
+      .badge { font-size: 10px; padding: 5px 12px; margin-bottom: 20px; }
+      .skills { gap: 7px; margin-bottom: 28px; }
+      .skill-pill { padding: 7px 12px; font-size: 11px; gap: 6px; }
+      .skill-dot { width: 6px; height: 6px; }
+      .mission { padding: 16px; border-radius: 14px; max-width: 100%; }
+      .mission p { font-size: 13px; line-height: 1.6; }
+      .mission-icon { font-size: 22px; margin-bottom: 8px; }
+      .cta-row { flex-direction: column; align-items: stretch; margin-top: 28px; }
+      .btn { text-align: center; padding: 13px 20px; }
+
+      /* Scroll hint */
+      .scroll-hint { display: none; }
+
+      /* Section header */
+      .section-title { font-size: 1.6rem; }
+      .section-sub { font-size: 14px; }
+
+      /* Cards */
+      .card-body { padding: 16px 18px 18px; }
+      .card-title { font-size: 15px; }
+      .card-desc { font-size: 13px; }
+      .card-media { aspect-ratio: 4/3; }
+
+      /* Carousel buttons */
+      .carousel-btn { width: 28px; height: 28px; font-size: 13px; }
+
+      /* Contact cards */
+      #contact { padding: 0 16px 60px; }
+
+      /* Lightbox */
+      #lbPrev { left: 8px; width: 40px; height: 40px; }
+      #lbNext { right: 8px; width: 40px; height: 40px; }
+      #lbZoomHint { display: none; }
+      #lbThumbs { bottom: 12px; }
+
+      /* Footer */
+      footer { padding: 32px 16px; font-size: 12px; }
+    }
+
+    /* ─── SCROLL REVEAL ─── */
+    .reveal {
+      opacity: 0;
+      transform: translateY(32px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+
+    .reveal.visible {
+      opacity: 1;
+      transform: none;
+    }
+
+    /* Staggered children */
+    .stagger > * {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.5s ease, transform 0.5s ease;
+    }
+
+    .stagger.visible > * { opacity: 1; transform: none; }
+    .stagger.visible > *:nth-child(1) { transition-delay: 0s; }
+    .stagger.visible > *:nth-child(2) { transition-delay: 0.08s; }
+    .stagger.visible > *:nth-child(3) { transition-delay: 0.16s; }
+    .stagger.visible > *:nth-child(4) { transition-delay: 0.24s; }
+    .stagger.visible > *:nth-child(5) { transition-delay: 0.32s; }
+    .stagger.visible > *:nth-child(6) { transition-delay: 0.40s; }
+    .stagger.visible > *:nth-child(7) { transition-delay: 0.48s; }
+    .stagger.visible > *:nth-child(8) { transition-delay: 0.56s; }
+
+    /* ─── FOOTER ─── */
+    footer {
+      text-align: center;
+      padding: 48px 32px;
+      color: var(--text3);
+      font-size: 13px;
+      border-top: 1px solid var(--border);
+      position: relative;
+      z-index: 2;
+    }
+
+    footer a { color: var(--accent); text-decoration: none; transition: color 0.2s; }
+    footer a:hover { color: #a5b4fc; }
+
+    /* Shimmer on card hover */
+    .project-card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, transparent 40%, rgba(99,102,241,0.04) 100%);
+      opacity: 0;
+      transition: opacity 0.3s;
+      pointer-events: none;
+      z-index: 1;
+      border-radius: 20px;
+    }
+
+    .project-card { position: relative; }
+    .project-card:hover::before { opacity: 1; }
+
+    /* ─── LANG TOGGLE ─── */
+    .lang-toggle {
+      display: flex;
+      align-items: center;
+      background: var(--toggle-bg);
+      border: 1px solid var(--border);
+      border-radius: 100px;
+      padding: 3px;
+      gap: 2px;
+    }
+
+    .lang-btn {
+      padding: 4px 12px;
+      border-radius: 100px;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      border: none;
+      background: transparent;
+      color: var(--text2);
+      transition: all 0.2s;
+      letter-spacing: 0.5px;
+    }
+
+    .lang-btn.active {
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      color: white;
+      box-shadow: 0 2px 8px var(--accent-glow);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Cursor glow -->
+  <div class="cursor-glow" id="cursorGlow"></div>
+
+  <!-- ═══ NAV ═══ -->
+  <nav class="nav">
+    <div class="nav-logo">imy.dev</div>
+    <ul class="nav-links">
+      <li><a href="#" data-i18n="navHome">Accueil</a></li>
+      <li><a href="#projets" data-i18n="navProjects">Projets</a></li>
+      <li><a href="#contact" data-i18n="navContact">Contact</a></li>
+    </ul>
+    <div class="nav-right">
+      <div class="lang-toggle">
+        <button class="lang-btn active" id="btnFR" onclick="setLang('fr')">FR</button>
+        <button class="lang-btn"        id="btnEN" onclick="setLang('en')">EN</button>
+      </div>
+      <button class="theme-toggle" id="themeToggle" aria-label="Changer le thème">
+        <div class="theme-toggle-knob" id="themeKnob">
+          <span id="themeIcon">🌙</span>
+        </div>
+      </button>
+      <div class="hamburger" id="hamburger" onclick="toggleMenu()" aria-label="Menu">
+        <span></span><span></span><span></span>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Mobile nav drawer -->
+  <div class="nav-drawer" id="navDrawer">
+    <a href="#"        data-i18n="navHome"     onclick="closeMenu()">Accueil</a>
+    <a href="#projets" data-i18n="navProjects" onclick="closeMenu()">Projets</a>
+    <a href="#contact" data-i18n="navContact"  onclick="closeMenu()">Contact</a>
+  </div>
+
+
+  <!-- ═══ HERO ═══ -->
+  <section class="hero">
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="orb orb-3"></div>
+
+    <div class="hero-content">
+
+      <img
+        src="assets/images/avatar.jpg"
+        alt="Photo de profil"
+        onerror="this.style.display='none'"
+        style="width:96px;height:96px;border-radius:50%;object-fit:cover;border:2px solid rgba(99,102,241,0.5);margin-bottom:28px;animation:fadeDown 0.7s ease both;"
+      />
+
+      <span class="badge">
+        <span class="badge-dot"></span>
+        <span data-i18n="heroBadge">Disponible pour de nouveaux projets</span>
+      </span>
+
+      <h1 data-i18n="heroTitle">Développeuse web passionnée par les interfaces intuitives et performantes</h1>
+
+      <p class="tagline" data-i18n="heroTagline">
+        Ma mission : transformer des besoins complexes en solutions digitales élégantes.
+      </p>
+
+      <div class="skills stagger">
+        <div class="skill-pill"><span class="skill-dot dot-js"></span>JavaScript</div>
+        <div class="skill-pill"><span class="skill-dot dot-react"></span>React</div>
+        <div class="skill-pill"><span class="skill-dot dot-php"></span>PHP</div>
+        <div class="skill-pill"><span class="skill-dot dot-flutter"></span>Flutter</div>
+        <div class="skill-pill"><span class="skill-dot dot-flutterflow"></span>FlutterFlow</div>
+        <div class="skill-pill"><span class="skill-dot dot-bubble"></span>Bubble</div>
+        <div class="skill-pill"><span class="skill-dot dot-nodejs"></span>Node.js</div>
+        <div class="skill-pill"><span class="skill-dot dot-python"></span>Python</div>
+      </div>
+
+      <div class="mission">
+        <div class="mission-icon">🎯</div>
+        <p data-i18n-html="heroMission">
+          Spécialisée en <strong>JavaScript, React, PHP, Flutter, FlutterFlow, Bubble, Node.js et Python</strong>,
+          je conçois des expériences web et mobile qui allient
+          <strong>clarté visuelle</strong> et <strong>robustesse technique</strong> —
+          du prototype à la mise en production.
+        </p>
+      </div>
+
+      <div class="cta-row">
+        <a href="#projets" class="btn btn-primary" data-i18n="heroCta1">Voir mes projets</a>
+        <a href="#contact" class="btn btn-ghost"   data-i18n="heroCta2">Me contacter</a>
+      </div>
+
+    </div>
+
+    <div class="scroll-hint">
+      <div class="scroll-line"></div>
+      <span>Scroll</span>
+    </div>
+  </section>
+
+
+  <!-- ═══ PROJETS ═══ -->
+  <section id="projets">
+
+    <div class="section-header reveal">
+      <span class="section-label" data-i18n="sectionLabel">Réalisations</span>
+      <h2 class="section-title" data-i18n="sectionTitle">Mes projets</h2>
+      <p class="section-sub" data-i18n="sectionSub">Applications, sites web et outils internes livrés pour des clients variés.</p>
+    </div>
+
+    <div class="filter-tabs stagger reveal">
+      <button class="filter-tab active" data-filter="all"     data-i18n="filterAll">Tous</button>
+      <button class="filter-tab"        data-filter="app"     data-i18n="filterApp">Applications</button>
+      <button class="filter-tab"        data-filter="web"     data-i18n="filterWeb">Sites web</button>
+      <button class="filter-tab"        data-filter="interne" data-i18n="filterInterne">Projets internes</button>
+    </div>
+
+    <div class="projects-grid">
+
+
+      <!-- ══ JowPlus App ══ -->
+      <div class="project-card reveal" data-category="app">
+        <div class="card-media">
+          <!-- Décommenter quand assets/jowplus-app.webm est prêt :
+          <video controls muted loop poster="https://image.thum.io/get/width/720/crop/450/https://jowplus.com/">
+            <source src="assets/jowplus-app.webm" type="video/webm">
+          </video>
+          -->
+          <div class="browser-frame">
+            <div class="browser-bar">
+              <div class="browser-dots"><div class="browser-dot"></div><div class="browser-dot"></div><div class="browser-dot"></div></div>
+              <div class="browser-url">jowplus.com</div>
+            </div>
+            <div class="browser-content">
+              <img src="https://image.thum.io/get/width/720/crop/450/https://jowplus.com/" alt="JowPlus" loading="lazy" onerror="this.parentElement.style.background='#1a1a24';this.style.display='none'" />
+            </div>
+          </div>
+          <span class="cat-badge cat-app">App</span>
+          <span class="live-badge"><span class="live-dot"></span>Live</span>
+        </div>
+        <div class="card-body">
+          <div class="card-title" data-i18n="jowTitle">JowPlus — Application</div>
+          <p class="card-desc" data-i18n="jowDesc">Plateforme de streaming et de contenu interactif. Interface moderne, navigation fluide, expérience utilisateur optimisée sur tous les appareils.</p>
+          <div class="card-footer">
+            <a href="https://jowplus.com/" target="_blank" rel="noopener" class="card-link">
+              <span data-i18n="jowLink">Voir l'app</span>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3"/></svg>
+            </a>
+          </div>
+        </div>
+      </div>
+
+
+      <!-- ══ JowPlus Radio ══ -->
+      <div class="project-card reveal" data-category="app">
+        <div class="card-media">
+          <!-- Décommenter quand assets/jowplus-radio.webm est prêt :
+          <video controls muted loop poster="https://image.thum.io/get/width/720/crop/450/https://jowplus.com/live/jow-radio">
+            <source src="assets/jowplus-radio.webm" type="video/webm">
+          </video>
+          -->
+          <div class="browser-frame">
+            <div class="browser-bar">
+              <div class="browser-dots"><div class="browser-dot"></div><div class="browser-dot"></div><div class="browser-dot"></div></div>
+              <div class="browser-url">jowplus.com/live/jow-radio</div>
+            </div>
+            <div class="browser-content">
+              <img src="https://image.thum.io/get/width/720/crop/450/https://jowplus.com/live/jow-radio" alt="JowPlus Radio" loading="lazy" onerror="this.parentElement.style.background='#1a1a24';this.style.display='none'" />
+            </div>
+          </div>
+          <span class="cat-badge cat-app">App</span>
+          <span class="live-badge"><span class="live-dot"></span>Live</span>
+        </div>
+        <div class="card-body">
+          <div class="card-title" data-i18n="radioTitle">JowPlus Radio — Stations en direct</div>
+          <p class="card-desc" data-i18n="radioDesc">Écoute de stations radio en streaming live. Interface dédiée à la diffusion audio continue avec gestion multi-stations et lecteur intégré.</p>
+          <div class="card-footer">
+            <a href="https://jowplus.com/live/jow-radio" target="_blank" rel="noopener" class="card-link">
+              <span data-i18n="radioLink">Écouter en direct</span>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3"/></svg>
+            </a>
+          </div>
+        </div>
+      </div>
+
+
+      <!-- ══ Ooredoo — carousel ══ -->
+      <div class="project-card reveal card-wide" data-category="interne">
+        <div class="card-media">
+          <div class="carousel" id="carousel-ooredoo">
+            <div class="carousel-track" id="track-ooredoo">
+              <img src="assets/Plan de travail 1 copie 7.jpg"  alt="Ooredoo 1" loading="lazy" />
+              <img src="assets/Plan de travail 1 copie 8.jpg"  alt="Ooredoo 2" loading="lazy" />
+              <img src="assets/Plan de travail 1 copie 9.jpg"  alt="Ooredoo 3" loading="lazy" />
+              <img src="assets/Plan de travail 1 copie 10.jpg" alt="Ooredoo 4" loading="lazy" />
+              <img src="assets/Plan de travail 1 copie 12.jpg" alt="Ooredoo 5" loading="lazy" />
+              <img src="assets/Plan de travail 1 copie 13.jpg" alt="Ooredoo 6" loading="lazy" />
+              <img src="assets/Plan de travail 1 copie 15.jpg" alt="Ooredoo 7" loading="lazy" />
+              <img src="assets/Plan de travail 18 copie 9.jpg" alt="Ooredoo 8" loading="lazy" />
+            </div>
+            <button class="carousel-btn prev" onclick="carouselPrev('ooredoo')">&#8249;</button>
+            <button class="carousel-btn next" onclick="carouselNext('ooredoo')">&#8250;</button>
+            <div class="carousel-dots" id="dots-ooredoo"></div>
+          </div>
+          <span class="cat-badge cat-interne">Interne</span>
+        </div>
+        <div class="card-body">
+          <div class="card-title" data-i18n="ooredooTitle">Ooredoo — Application interne</div>
+          <p class="card-desc" data-i18n="ooredooDesc">Application de gestion interne pour Ooredoo Algérie. Interface conçue pour les équipes terrain : navigation optimisée, flux de travail simplifiés et expérience cohérente sur mobile.</p>
+          <div class="card-footer">
+            <span class="card-restricted" data-i18n="restricted">🔒 Application interne — accès restreint</span>
+          </div>
+        </div>
+      </div>
+
+
+      <!-- ══ Covoiturage — App interne ══ -->
+      <div class="project-card reveal" data-category="interne">
+        <div class="card-media">
+          <img src="assets/covoiturage app.PNG" alt="Application Covoiturage" loading="lazy" />
+          <span class="cat-badge cat-interne">Interne</span>
+        </div>
+        <div class="card-body">
+          <div class="card-title" data-i18n="covoitTitle">Covoiturage — Application interne</div>
+          <p class="card-desc" data-i18n="covoitDesc">Application de covoiturage dédiée aux collaborateurs de l'entreprise. Mise en relation conducteurs/passagers, gestion des trajets et optimisation des déplacements domicile-travail.</p>
+          <div class="card-footer">
+            <span class="card-restricted" data-i18n="restricted">🔒 Application interne — accès restreint</span>
+          </div>
+        </div>
+      </div>
+
+
+      <!-- ══ Renault ══ -->
+      <div class="project-card reveal" data-category="interne">
+        <div class="card-media">
+          <div class="carousel" id="carousel-renault">
+            <div class="carousel-track" id="track-renault">
+              <img src="assets/renault app.jpg" alt="Renault App" loading="lazy" />
+              <img src="assets/renault app.png" alt="Renault App 2" loading="lazy" />
+            </div>
+            <button class="carousel-btn prev" onclick="carouselPrev('renault')">&#8249;</button>
+            <button class="carousel-btn next" onclick="carouselNext('renault')">&#8250;</button>
+            <div class="carousel-dots" id="dots-renault"></div>
+          </div>
+          <span class="cat-badge cat-interne">Interne</span>
+        </div>
+        <div class="card-body">
+          <div class="card-title" data-i18n="renaultTitle">Renault — Refonte charte & Backend</div>
+          <p class="card-desc" data-i18n="renaultDesc">Mise à jour complète de l'application interne Renault : nouvelle charte graphique alignée sur l'identité de marque et refonte du backend pour améliorer les performances.</p>
+          <div class="card-footer">
+            <span class="card-restricted" data-i18n="restricted">🔒 Application interne — accès restreint</span>
+          </div>
+        </div>
+      </div>
+
+
+      <!-- ══ TadaSurvey ══ -->
+      <div class="project-card reveal" data-category="app">
+        <div class="card-media" style="background:linear-gradient(135deg,#1a1a2e,#16213e);display:flex;align-items:center;justify-content:center;">
+          <div style="text-align:center;padding:32px;position:relative;z-index:2;">
+            <div style="font-size:52px;margin-bottom:14px;filter:drop-shadow(0 0 20px rgba(99,102,241,0.5));">📊</div>
+            <div style="font-size:20px;font-weight:800;background:linear-gradient(135deg,#fff,#a5b4fc);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">TadaSurvey</div>
+            <div style="font-size:12px;color:#6b7280;margin-top:6px;letter-spacing:1px;text-transform:uppercase;">Dashboard & Analytics</div>
+          </div>
+          <span class="cat-badge cat-app">App</span>
+        </div>
+        <div class="card-body">
+          <div class="card-title" data-i18n="tadaTitle">TadaSurvey — Plateforme de sondages</div>
+          <p class="card-desc" data-i18n="tadaDesc">Application de création et gestion de sondages avec tableau de bord analytique. Visualisation des résultats en temps réel et gestion multi-utilisateurs.</p>
+          <div class="card-footer">
+            <a href="assets/TadaSurvey_Documentation_Dashboard .pptx" download class="card-link">
+              <span data-i18n="tadaLink">Télécharger la présentation</span>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
+            </a>
+          </div>
+        </div>
+      </div>
+
+
+      <!-- ══ Palmary ══ -->
+      <div class="project-card reveal card-wide" data-category="web">
+        <div class="card-media">
+          <video controls muted loop style="width:100%;height:100%;object-fit:cover;"
+            poster="https://image.thum.io/get/width/1200/crop/450/https://palmary.onrender.com/">
+            <source src="assets/palmary site .webm" type="video/webm">
+          </video>
+          <span class="cat-badge cat-web">Web</span>
+          <span class="live-badge"><span class="live-dot"></span>Live</span>
+        </div>
+        <div class="card-body">
+          <div class="card-title" data-i18n="palmaryTitle">Palmary — Site institutionnel</div>
+          <p class="card-desc" data-i18n="palmaryDesc">Site vitrine du groupe Palmary. Design soigné, animations fluides, contenu structuré pour valoriser l'image de marque et faciliter la prise de contact.</p>
+          <div class="card-footer">
+            <a href="https://palmary.onrender.com/" target="_blank" rel="noopener" class="card-link">
+              <span data-i18n="linkSite">Voir le site</span>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3"/></svg>
+            </a>
+          </div>
+        </div>
+      </div>
+
+
+      <!-- Sites web générés (macro) -->
+      <!-- ══ Kara Clinique ══ -->
+      <div class="project-card reveal" data-category="web">
+        <div class="card-media">
+          <div class="browser-frame">
+            <div class="browser-bar"><div class="browser-dots"><div class="browser-dot"></div><div class="browser-dot"></div><div class="browser-dot"></div></div><div class="browser-url">karaclinique.com</div></div>
+            <div class="browser-content"><img src="https://image.thum.io/get/width/720/crop/450/https://karaclinique.com/" alt="Kara Clinique" loading="lazy" onerror="this.parentElement.style.background='var(--bg3)';this.style.display='none'" /></div>
+          </div>
+          <span class="cat-badge cat-web">Web</span>
+          <span class="live-badge"><span class="live-dot"></span>Live</span>
+        </div>
+        <div class="card-body">
+          <div class="card-title">Kara Clinique</div>
+          <p class="card-desc" data-i18n="karaDesc">Site médical présentant les services, l'équipe et facilitant la prise de contact pour les patients.</p>
+          <div class="card-footer">
+            <a href="https://karaclinique.com/" target="_blank" rel="noopener" class="card-link"><span data-i18n="linkSite">Voir le site</span> <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3"/></svg></a>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ AMCHAM ══ -->
+      <div class="project-card reveal" data-category="web">
+        <div class="card-media">
+          <div class="browser-frame">
+            <div class="browser-bar"><div class="browser-dots"><div class="browser-dot"></div><div class="browser-dot"></div><div class="browser-dot"></div></div><div class="browser-url">amchamfrance.org</div></div>
+            <div class="browser-content"><img src="https://image.thum.io/get/width/720/crop/450/https://amchamfrance.org/" alt="AMCHAM France" loading="lazy" onerror="this.parentElement.style.background='var(--bg3)';this.style.display='none'" /></div>
+          </div>
+          <span class="cat-badge cat-web">Web</span>
+          <span class="live-badge"><span class="live-dot"></span>Live</span>
+        </div>
+        <div class="card-body">
+          <div class="card-title">AMCHAM France</div>
+          <p class="card-desc" data-i18n="amchamDesc">Site institutionnel pour la Chambre de Commerce Américaine en France. Gestion d'événements et espace membres.</p>
+          <div class="card-footer">
+            <a href="https://amchamfrance.org/" target="_blank" rel="noopener" class="card-link"><span data-i18n="linkSite">Voir le site</span> <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3"/></svg></a>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ MetmLand ══ -->
+      <div class="project-card reveal" data-category="web">
+        <div class="card-media">
+          <div class="browser-frame">
+            <div class="browser-bar"><div class="browser-dots"><div class="browser-dot"></div><div class="browser-dot"></div><div class="browser-dot"></div></div><div class="browser-url">metmland.org</div></div>
+            <div class="browser-content"><img src="https://image.thum.io/get/width/720/crop/450/https://metmland.org/" alt="MetmLand" loading="lazy" onerror="this.parentElement.style.background='var(--bg3)';this.style.display='none'" /></div>
+          </div>
+          <span class="cat-badge cat-web">Web</span>
+          <span class="live-badge"><span class="live-dot"></span>Live</span>
+        </div>
+        <div class="card-body">
+          <div class="card-title">MetmLand</div>
+          <p class="card-desc" data-i18n="metmlandDesc">Plateforme en ligne présentant l'activité, catalogue et interface de mise en relation client.</p>
+          <div class="card-footer">
+            <a href="https://metmland.org/" target="_blank" rel="noopener" class="card-link"><span data-i18n="linkSite">Voir le site</span> <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3"/></svg></a>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ ProArchive ══ -->
+      <div class="project-card reveal" data-category="web">
+        <div class="card-media">
+          <div class="browser-frame">
+            <div class="browser-bar"><div class="browser-dots"><div class="browser-dot"></div><div class="browser-dot"></div><div class="browser-dot"></div></div><div class="browser-url">proarchive-dz.com</div></div>
+            <div class="browser-content"><img src="https://image.thum.io/get/width/720/crop/450/https://proarchive-dz.com/evenement/proged-2/" alt="ProArchive" loading="lazy" onerror="this.parentElement.style.background='var(--bg3)';this.style.display='none'" /></div>
+          </div>
+          <span class="cat-badge cat-web">Web</span>
+          <span class="live-badge"><span class="live-dot"></span>Live</span>
+        </div>
+        <div class="card-body">
+          <div class="card-title">ProArchive — Proged</div>
+          <p class="card-desc" data-i18n="proarchiveDesc">Page événement avec programme, intervenants et formulaire d'inscription pour l'événement Proged.</p>
+          <div class="card-footer">
+            <a href="https://proarchive-dz.com/evenement/proged-2/" target="_blank" rel="noopener" class="card-link"><span data-i18n="linkPage">Voir la page</span> <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3"/></svg></a>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ Palmary Food ══ -->
+      <div class="project-card reveal" data-category="web">
+        <div class="card-media">
+          <div class="browser-frame">
+            <div class="browser-bar"><div class="browser-dots"><div class="browser-dot"></div><div class="browser-dot"></div><div class="browser-dot"></div></div><div class="browser-url">palmaryfood.com</div></div>
+            <div class="browser-content"><img src="https://image.thum.io/get/width/720/crop/450/https://palmaryfood.com/" alt="Palmary Food" loading="lazy" onerror="this.parentElement.style.background='var(--bg3)';this.style.display='none'" /></div>
+          </div>
+          <span class="cat-badge cat-web">Web</span>
+          <span class="live-badge"><span class="live-dot"></span>Live</span>
+        </div>
+        <div class="card-body">
+          <div class="card-title">Palmary Food</div>
+          <p class="card-desc" data-i18n="palmaryfoodDesc">Site vitrine pour Palmary Food. Catalogue produits et présentation des gammes alimentaires avec une expérience de marque cohérente.</p>
+          <div class="card-footer">
+            <a href="https://palmaryfood.com/" target="_blank" rel="noopener" class="card-link"><span data-i18n="linkSite">Voir le site</span> <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3"/></svg></a>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ Van Meester ══ -->
+      <div class="project-card reveal" data-category="web">
+        <div class="card-media">
+          <div class="browser-frame">
+            <div class="browser-bar"><div class="browser-dots"><div class="browser-dot"></div><div class="browser-dot"></div><div class="browser-dot"></div></div><div class="browser-url">vanmeester.com</div></div>
+            <div class="browser-content"><img src="https://image.thum.io/get/width/720/crop/450/https://vanmeester.com/" alt="Van Meester" loading="lazy" onerror="this.parentElement.style.background='var(--bg3)';this.style.display='none'" /></div>
+          </div>
+          <span class="cat-badge cat-web">Web</span>
+          <span class="live-badge"><span class="live-dot"></span>Live</span>
+        </div>
+        <div class="card-body">
+          <div class="card-title">Van Meester</div>
+          <p class="card-desc" data-i18n="vanmeesterDesc">Site institutionnel avec une identité visuelle forte pour présenter l'entreprise, ses valeurs et ses services.</p>
+          <div class="card-footer">
+            <a href="https://vanmeester.com/" target="_blank" rel="noopener" class="card-link"><span data-i18n="linkSite">Voir le site</span> <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3"/></svg></a>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ Djouadi Office ══ -->
+      <div class="project-card reveal" data-category="web">
+        <div class="card-media">
+          <div class="browser-frame">
+            <div class="browser-bar"><div class="browser-dots"><div class="browser-dot"></div><div class="browser-dot"></div><div class="browser-dot"></div></div><div class="browser-url">djouadi-office.com</div></div>
+            <div class="browser-content"><img src="https://image.thum.io/get/width/720/crop/450/https://djouadi-office.com/" alt="Djouadi Office" loading="lazy" onerror="this.parentElement.style.background='var(--bg3)';this.style.display='none'" /></div>
+          </div>
+          <span class="cat-badge cat-web">Web</span>
+          <span class="live-badge"><span class="live-dot"></span>Live</span>
+        </div>
+        <div class="card-body">
+          <div class="card-title">Djouadi Office</div>
+          <p class="card-desc" data-i18n="djouadiDesc">Interface épurée mettant en valeur les produits et services bureautiques de Djouadi Office.</p>
+          <div class="card-footer">
+            <a href="https://djouadi-office.com/" target="_blank" rel="noopener" class="card-link"><span data-i18n="linkSite">Voir le site</span> <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3"/></svg></a>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ South & Global ══ -->
+      <div class="project-card reveal" data-category="web">
+        <div class="card-media">
+          <div class="browser-frame">
+            <div class="browser-bar"><div class="browser-dots"><div class="browser-dot"></div><div class="browser-dot"></div><div class="browser-dot"></div></div><div class="browser-url">southandglobal.group</div></div>
+            <div class="browser-content"><img src="https://image.thum.io/get/width/720/crop/450/https://southandglobal.group/" alt="South and Global" loading="lazy" onerror="this.parentElement.style.background='var(--bg3)';this.style.display='none'" /></div>
+          </div>
+          <span class="cat-badge cat-web">Web</span>
+          <span class="live-badge"><span class="live-dot"></span>Live</span>
+        </div>
+        <div class="card-body">
+          <div class="card-title">South & Global</div>
+          <p class="card-desc" data-i18n="southDesc">Site corporate international pour South & Global Group. Positionnement premium, présentation des pôles d'activité.</p>
+          <div class="card-footer">
+            <a href="https://southandglobal.group/" target="_blank" rel="noopener" class="card-link"><span data-i18n="linkSite">Voir le site</span> <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3"/></svg></a>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ Isopro Industrie ══ -->
+      <div class="project-card reveal" data-category="web">
+        <div class="card-media">
+          <div class="browser-frame">
+            <div class="browser-bar"><div class="browser-dots"><div class="browser-dot"></div><div class="browser-dot"></div><div class="browser-dot"></div></div><div class="browser-url">isopro-industrie.dz</div></div>
+            <div class="browser-content"><img src="https://image.thum.io/get/width/720/crop/450/https://isopro-industrie.dz/" alt="Isopro Industrie" loading="lazy" onerror="this.parentElement.style.background='var(--bg3)';this.style.display='none'" /></div>
+          </div>
+          <span class="cat-badge cat-web">Web</span>
+          <span class="live-badge"><span class="live-dot"></span>Live</span>
+        </div>
+        <div class="card-body">
+          <div class="card-title">Isopro Industrie</div>
+          <p class="card-desc" data-i18n="isoproDesc">Site institutionnel pour Isopro Industrie, spécialiste algérien de l'isolation industrielle. Présentation des solutions techniques, références et expertise métier.</p>
+          <div class="card-footer">
+            <a href="https://isopro-industrie.dz/" target="_blank" rel="noopener" class="card-link"><span data-i18n="linkSite">Voir le site</span> <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3"/></svg></a>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ Amoud Ciment ══ -->
+      <div class="project-card reveal" data-category="web">
+        <div class="card-media">
+          <div class="browser-frame">
+            <div class="browser-bar"><div class="browser-dots"><div class="browser-dot"></div><div class="browser-dot"></div><div class="browser-dot"></div></div><div class="browser-url">amoudaciment.dz</div></div>
+            <div class="browser-content"><img src="https://image.thum.io/get/width/720/crop/450/https://amoudaciment.dz/" alt="Amoud Ciment" loading="lazy" onerror="this.parentElement.style.background='var(--bg3)';this.style.display='none'" /></div>
+          </div>
+          <span class="cat-badge cat-web">Web</span>
+          <span class="live-badge"><span class="live-dot"></span>Live</span>
+        </div>
+        <div class="card-body">
+          <div class="card-title">Amoud Ciment</div>
+          <p class="card-desc" data-i18n="amoudDesc">Site institutionnel pour Amoud Ciment, acteur algérien du secteur de la construction. Gammes produits et réseau de distribution.</p>
+          <div class="card-footer">
+            <a href="https://amoudaciment.dz/" target="_blank" rel="noopener" class="card-link"><span data-i18n="linkSite">Voir le site</span> <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3"/></svg></a>
+          </div>
+        </div>
+      </div>
+
+
+    </div><!-- /projects-grid -->
+  </section>
+
+
+  <!-- ═══ CONTACT ═══ -->
+  <section id="contact" style="position:relative;z-index:2;padding:0 24px 100px;">
+    <div style="max-width:640px;margin:0 auto;">
+
+      <div class="section-header reveal">
+        <span class="section-label" data-i18n="navContact">Contact</span>
+        <h2 class="section-title" data-i18n="contactTitle">Travaillons ensemble</h2>
+        <p class="section-sub" data-i18n="contactSub">Disponible pour des projets freelance, des missions ou une collaboration.</p>
+      </div>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;" class="reveal">
+
+        <!-- Email perso -->
+        <a href="mailto:imanemersaoui7@gmail.com" style="text-decoration:none;">
+          <div style="
+            background:var(--bg2);border:1px solid var(--border);border-radius:20px;
+            padding:28px 24px;display:flex;flex-direction:column;gap:14px;
+            transition:all 0.25s;cursor:pointer;
+          " onmouseover="this.style.borderColor='rgba(99,102,241,0.4)';this.style.transform='translateY(-3px)';this.style.boxShadow='0 16px 48px var(--card-sh)'"
+             onmouseout="this.style.borderColor='var(--border)';this.style.transform='';this.style.boxShadow=''">
+            <div style="
+              width:44px;height:44px;border-radius:12px;
+              background:rgba(99,102,241,0.12);border:1px solid rgba(99,102,241,0.25);
+              display:flex;align-items:center;justify-content:center;font-size:20px;
+            ">✉️</div>
+            <div>
+              <div style="font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--text3);margin-bottom:6px;">Email</div>
+              <div style="font-size:14px;font-weight:600;color:var(--text);">imanemersaoui7</div>
+              <div style="font-size:13px;color:var(--text2);">@gmail.com</div>
+            </div>
+            <div style="font-size:12px;color:var(--accent);font-weight:600;display:flex;align-items:center;gap:5px;">
+              <span data-i18n="contactEmailCta">Envoyer un message</span>
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </div>
+          </div>
+        </a>
+
+        <!-- WhatsApp -->
+        <a href="https://wa.me/213794759598" target="_blank" rel="noopener" style="text-decoration:none;">
+          <div style="
+            background:var(--bg2);border:1px solid var(--border);border-radius:20px;
+            padding:28px 24px;display:flex;flex-direction:column;gap:14px;
+            transition:all 0.25s;cursor:pointer;
+          " onmouseover="this.style.borderColor='rgba(37,211,102,0.4)';this.style.transform='translateY(-3px)';this.style.boxShadow='0 16px 48px var(--card-sh)'"
+             onmouseout="this.style.borderColor='var(--border)';this.style.transform='';this.style.boxShadow=''">
+            <div style="
+              width:44px;height:44px;border-radius:12px;
+              background:rgba(37,211,102,0.1);border:1px solid rgba(37,211,102,0.25);
+              display:flex;align-items:center;justify-content:center;font-size:20px;
+            ">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="#25d366"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+            </div>
+            <div>
+              <div style="font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--text3);margin-bottom:6px;">WhatsApp</div>
+              <div style="font-size:14px;font-weight:600;color:var(--text);">+213 794 75 95 98</div>
+              <div style="font-size:13px;color:var(--text2);" data-i18n="contactWaAvail">Disponible en journée</div>
+            </div>
+            <div style="font-size:12px;color:#25d366;font-weight:600;display:flex;align-items:center;gap:5px;">
+              <span data-i18n="contactWaCta">Ouvrir WhatsApp</span>
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </div>
+          </div>
+        </a>
+
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ═══ FOOTER ═══ -->
+  <footer>
+    <p>&copy; 2026 · Imane Mersaoui · <span data-i18n="footerCrafted">Conçu avec soin</span> · <a href="mailto:imanemersaoui7@gmail.com">imanemersaoui7@gmail.com</a></p>
+  </footer>
+
+
+  <!-- ═══ LIGHTBOX ═══ -->
+  <div id="lightbox" style="
+    display:none;position:fixed;inset:0;z-index:9999;
+    background:rgba(0,0,0,0.92);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);
+    align-items:center;justify-content:center;flex-direction:column;
+  ">
+    <!-- Close -->
+    <button onclick="lbClose()" style="
+      position:absolute;top:20px;right:24px;
+      background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15);
+      color:#fff;border-radius:50%;width:44px;height:44px;font-size:20px;
+      cursor:pointer;display:flex;align-items:center;justify-content:center;
+      transition:background 0.2s;z-index:2;
+    " onmouseover="this.style.background='rgba(99,102,241,0.5)'" onmouseout="this.style.background='rgba(255,255,255,0.08)'">✕</button>
+
+    <!-- Counter -->
+    <div id="lbCounter" style="
+      position:absolute;top:24px;left:50%;transform:translateX(-50%);
+      color:rgba(255,255,255,0.4);font-size:13px;letter-spacing:1px;
+    "></div>
+
+    <!-- Prev -->
+    <button onclick="lbNav(-1)" id="lbPrev" style="
+      position:absolute;left:20px;top:50%;transform:translateY(-50%);
+      background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15);
+      color:#fff;border-radius:50%;width:52px;height:52px;font-size:24px;
+      cursor:pointer;display:flex;align-items:center;justify-content:center;
+      transition:all 0.2s;z-index:2;
+    " onmouseover="this.style.background='rgba(99,102,241,0.5)'" onmouseout="this.style.background='rgba(255,255,255,0.08)'">&#8249;</button>
+
+    <!-- Next -->
+    <button onclick="lbNav(1)" id="lbNext" style="
+      position:absolute;right:20px;top:50%;transform:translateY(-50%);
+      background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15);
+      color:#fff;border-radius:50%;width:52px;height:52px;font-size:24px;
+      cursor:pointer;display:flex;align-items:center;justify-content:center;
+      transition:all 0.2s;z-index:2;
+    " onmouseover="this.style.background='rgba(99,102,241,0.5)'" onmouseout="this.style.background='rgba(255,255,255,0.08)'">&#8250;</button>
+
+    <!-- Image wrapper with zoom -->
+    <div id="lbWrapper" style="
+      position:relative;max-width:90vw;max-height:85vh;
+      display:flex;align-items:center;justify-content:center;
+      cursor:zoom-in;overflow:hidden;border-radius:12px;
+    " onclick="lbToggleZoom()">
+      <img id="lbImg" src="" alt="" style="
+        max-width:90vw;max-height:85vh;
+        object-fit:contain;border-radius:12px;
+        transition:transform 0.35s cubic-bezier(0.4,0,0.2,1), opacity 0.25s;
+        display:block;user-select:none;
+      " draggable="false" />
+    </div>
+
+    <!-- Caption -->
+    <div id="lbCaption" style="
+      margin-top:16px;color:rgba(255,255,255,0.55);
+      font-size:14px;letter-spacing:0.3px;text-align:center;
+    "></div>
+
+    <!-- Zoom hint -->
+    <div id="lbZoomHint" data-i18n="lbHint" style="
+      position:absolute;bottom:24px;right:24px;
+      background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.12);
+      color:rgba(255,255,255,0.4);font-size:11px;padding:5px 12px;border-radius:100px;
+      letter-spacing:0.5px;
+    ">Clic = zoom · Échap = fermer</div>
+
+    <!-- Thumbnails strip -->
+    <div id="lbThumbs" style="
+      position:absolute;bottom:60px;left:50%;transform:translateX(-50%);
+      display:flex;gap:8px;max-width:90vw;overflow-x:auto;padding:4px;
+      scrollbar-width:none;
+    "></div>
+  </div>
+
+  <script>
+    /* ── TRANSLATIONS ── */
+    const translations = {
+      fr: {
+        navHome:        'Accueil',
+        navProjects:    'Projets',
+        navContact:     'Contact',
+        heroBadge:      'Disponible pour de nouveaux projets',
+        heroTitle:      'Développeuse web passionnée par les interfaces intuitives et performantes',
+        heroTagline:    'Ma mission : transformer des besoins complexes en solutions digitales élégantes.',
+        heroMission:    'Spécialisée en <strong>JavaScript, React, PHP, Flutter, FlutterFlow, Bubble, Node.js et Python</strong>, je conçois des expériences web et mobile qui allient <strong>clarté visuelle</strong> et <strong>robustesse technique</strong> — du prototype à la mise en production.',
+        heroCta1:       'Voir mes projets',
+        heroCta2:       'Me contacter',
+        sectionLabel:   'Réalisations',
+        sectionTitle:   'Mes projets',
+        sectionSub:     'Applications, sites web et outils internes livrés pour des clients variés.',
+        filterAll:      'Tous',
+        filterApp:      'Applications',
+        filterWeb:      'Sites web',
+        filterInterne:  'Projets internes',
+        jowTitle:       'JowPlus — Application',
+        jowDesc:        'Plateforme de streaming et de contenu interactif. Interface moderne, navigation fluide, expérience utilisateur optimisée sur tous les appareils.',
+        jowLink:        "Voir l'app",
+        radioTitle:     'JowPlus Radio — Stations en direct',
+        radioDesc:      'Écoute de stations radio en streaming live. Interface dédiée à la diffusion audio continue avec gestion multi-stations et lecteur intégré.',
+        radioLink:      'Écouter en direct',
+        ooredooTitle:   'Ooredoo — Application interne',
+        ooredooDesc:    "Application de gestion interne pour Ooredoo Algérie. Interface conçue pour les équipes terrain : navigation optimisée, flux de travail simplifiés et expérience cohérente sur mobile.",
+        covoitTitle:    'Covoiturage — Application interne',
+        covoitDesc:     "Application de covoiturage dédiée aux collaborateurs de l'entreprise. Mise en relation conducteurs/passagers, gestion des trajets et optimisation des déplacements domicile-travail.",
+        renaultTitle:   'Renault — Refonte charte & Backend',
+        renaultDesc:    "Mise à jour complète de l'application interne Renault : nouvelle charte graphique alignée sur l'identité de marque et refonte du backend pour améliorer les performances.",
+        restricted:     '🔒 Application interne — accès restreint',
+        tadaTitle:      'TadaSurvey — Plateforme de sondages',
+        tadaDesc:       'Application de création et gestion de sondages avec tableau de bord analytique. Visualisation des résultats en temps réel et gestion multi-utilisateurs.',
+        tadaLink:       'Télécharger la présentation',
+        palmaryTitle:   'Palmary — Site institutionnel',
+        palmaryDesc:    "Site vitrine du groupe Palmary. Design soigné, animations fluides, contenu structuré pour valoriser l'image de marque et faciliter la prise de contact.",
+        karaDesc:       "Site médical présentant les services, l'équipe et facilitant la prise de contact pour les patients.",
+        amchamDesc:     "Site institutionnel pour la Chambre de Commerce Américaine en France. Gestion d'événements et espace membres.",
+        metmlandDesc:   "Plateforme en ligne présentant l'activité, catalogue et interface de mise en relation client.",
+        proarchiveDesc: "Page événement avec programme, intervenants et formulaire d'inscription pour l'événement Proged.",
+        palmaryfoodDesc:'Site vitrine pour Palmary Food. Catalogue produits et présentation des gammes alimentaires avec une expérience de marque cohérente.',
+        vanmeesterDesc: "Site institutionnel avec une identité visuelle forte pour présenter l'entreprise, ses valeurs et ses services.",
+        djouadiDesc:    "Interface épurée mettant en valeur les produits et services bureautiques de Djouadi Office.",
+        southDesc:      "Site corporate international pour South & Global Group. Positionnement premium, présentation des pôles d'activité.",
+        isoproDesc:     "Site institutionnel pour Isopro Industrie, spécialiste algérien de l'isolation industrielle. Présentation des solutions techniques, références et expertise métier.",
+        amoudDesc:      "Site institutionnel pour Amoud Ciment, acteur algérien du secteur de la construction. Gammes produits et réseau de distribution.",
+        linkSite:       'Voir le site',
+        linkPage:       'Voir la page',
+        contactTitle:   'Travaillons ensemble',
+        contactSub:     'Disponible pour des projets freelance, des missions ou une collaboration.',
+        contactEmailCta:'Envoyer un message',
+        contactWaAvail: 'Disponible en journée',
+        contactWaCta:   'Ouvrir WhatsApp',
+        lbHint:         'Clic = zoom · Échap = fermer',
+        footerCrafted:  'Conçu avec soin',
+      },
+      en: {
+        navHome:        'Home',
+        navProjects:    'Projects',
+        navContact:     'Contact',
+        heroBadge:      'Available for new projects',
+        heroTitle:      'Web developer passionate about intuitive and high-performance interfaces',
+        heroTagline:    'My mission: turning complex needs into elegant digital solutions.',
+        heroMission:    'Specialized in <strong>JavaScript, React, PHP, Flutter, FlutterFlow, Bubble, Node.js and Python</strong>, I design web and mobile experiences that combine <strong>visual clarity</strong> and <strong>technical robustness</strong> — from prototype to production.',
+        heroCta1:       'View my projects',
+        heroCta2:       'Contact me',
+        sectionLabel:   'Work',
+        sectionTitle:   'My Projects',
+        sectionSub:     'Applications, websites and internal tools delivered for various clients.',
+        filterAll:      'All',
+        filterApp:      'Apps',
+        filterWeb:      'Websites',
+        filterInterne:  'Internal Projects',
+        jowTitle:       'JowPlus — Application',
+        jowDesc:        'Streaming and interactive content platform. Modern interface, smooth navigation, user experience optimized for all devices.',
+        jowLink:        'View app',
+        radioTitle:     'JowPlus Radio — Live Stations',
+        radioDesc:      'Live radio streaming. Dedicated interface for continuous audio broadcast with multi-station management and integrated player.',
+        radioLink:      'Listen live',
+        ooredooTitle:   'Ooredoo — Internal Application',
+        ooredooDesc:    'Internal management application for Ooredoo Algeria. Interface designed for field teams: optimized navigation, simplified workflows and consistent mobile experience.',
+        covoitTitle:    'Carpooling — Internal Application',
+        covoitDesc:     'Carpooling application for company employees. Driver/passenger matching, trip management and commute optimization.',
+        renaultTitle:   'Renault — Brand & Backend Overhaul',
+        renaultDesc:    'Complete overhaul of the Renault internal application: new brand guidelines and backend refactoring to improve performance and maintainability.',
+        restricted:     '🔒 Internal app — restricted access',
+        tadaTitle:      'TadaSurvey — Survey Platform',
+        tadaDesc:       'Survey creation and management application with analytics dashboard. Real-time results visualization and multi-user management.',
+        tadaLink:       'Download presentation',
+        palmaryTitle:   'Palmary — Institutional Website',
+        palmaryDesc:    'Showcase website for the Palmary group. Refined design, smooth animations and structured content to enhance brand image.',
+        karaDesc:       'Medical website presenting services, team and facilitating patient contact.',
+        amchamDesc:     'Institutional website for the American Chamber of Commerce in France. Event management and member area.',
+        metmlandDesc:   'Online platform presenting the activity, product catalogue and client contact interface.',
+        proarchiveDesc: 'Event page with programme, speakers and registration form for the Proged event.',
+        palmaryfoodDesc:'Showcase website for Palmary Food. Product catalogue and food range presentation with a consistent brand experience.',
+        vanmeesterDesc: 'Institutional website with a strong visual identity presenting the company, its values and services.',
+        djouadiDesc:    'Clean interface showcasing the products and office services of Djouadi Office.',
+        southDesc:      'International corporate website for South & Global Group. Premium positioning and business unit presentation.',
+        isoproDesc:     'Institutional website for Isopro Industrie, an Algerian specialist in industrial insulation. Technical solutions, references and industry expertise.',
+        amoudDesc:      'Institutional website for Amoud Ciment, an Algerian construction industry player. Product ranges and distribution network.',
+        linkSite:       'View site',
+        linkPage:       'View page',
+        contactTitle:   "Let's work together",
+        contactSub:     'Available for freelance projects, missions or collaborations.',
+        contactEmailCta:'Send a message',
+        contactWaAvail: 'Available during the day',
+        contactWaCta:   'Open WhatsApp',
+        lbHint:         'Click = zoom · Esc = close',
+        footerCrafted:  'Crafted with care',
+      }
+    };
+
+    let currentLang = localStorage.getItem('lang') || 'fr';
+
+    function setLang(lang) {
+      currentLang = lang;
+      localStorage.setItem('lang', lang);
+      const t = translations[lang];
+
+      // Text elements
+      document.querySelectorAll('[data-i18n]').forEach(el => {
+        const key = el.getAttribute('data-i18n');
+        if (t[key] !== undefined) el.textContent = t[key];
+      });
+
+      // HTML elements (contain <strong> etc.)
+      document.querySelectorAll('[data-i18n-html]').forEach(el => {
+        const key = el.getAttribute('data-i18n-html');
+        if (t[key] !== undefined) el.innerHTML = t[key];
+      });
+
+      // Toggle buttons
+      document.getElementById('btnFR').classList.toggle('active', lang === 'fr');
+      document.getElementById('btnEN').classList.toggle('active', lang === 'en');
+
+      // Update html lang attribute
+      document.documentElement.lang = lang;
+
+      // Re-animate tagline
+      setTimeout(animateTagline, 50);
+    }
+
+    // Apply on load
+    setLang(currentLang);
+
+    // Animate tagline words after lang set
+    function animateTagline() {
+      const tagline = document.querySelector('.tagline');
+      if (!tagline) return;
+      const text = tagline.textContent.trim();
+      const words = text.split(' ');
+      tagline.innerHTML = words.map((w, i) =>
+        `<span class="tagline-word" style="animation-delay:${0.6 + i * 0.07}s">${w}&nbsp;</span>`
+      ).join('') + '<span class="tagline-cursor"></span>';
+    }
+    animateTagline();
+
+    /* ── HAMBURGER MENU ── */
+    function toggleMenu() {
+      const h = document.getElementById('hamburger');
+      const d = document.getElementById('navDrawer');
+      const open = h.classList.toggle('open');
+      d.classList.toggle('open', open);
+      d.style.display = open ? 'flex' : 'flex'; // keep flex, animate via opacity
+    }
+
+    function closeMenu() {
+      document.getElementById('hamburger').classList.remove('open');
+      document.getElementById('navDrawer').classList.remove('open');
+    }
+
+    // Close drawer on outside click
+    document.addEventListener('click', e => {
+      const h = document.getElementById('hamburger');
+      const d = document.getElementById('navDrawer');
+      if (!h.contains(e.target) && !d.contains(e.target)) closeMenu();
+    });
+
+    // Close drawer on scroll
+    window.addEventListener('scroll', closeMenu, { passive: true });
+
+    /* ── CURSOR GLOW ── */
+    const glow = document.getElementById('cursorGlow');
+    let mx = window.innerWidth / 2, my = window.innerHeight / 2;
+    let cx = mx, cy = my;
+
+    document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; });
+
+    function animateGlow() {
+      cx += (mx - cx) * 0.07;
+      cy += (my - cy) * 0.07;
+      glow.style.left = cx + 'px';
+      glow.style.top  = cy + 'px';
+      requestAnimationFrame(animateGlow);
+    }
+    animateGlow();
+
+    /* ── 3D TILT on cards ── */
+    document.querySelectorAll('.project-card').forEach(card => {
+      card.addEventListener('mousemove', e => {
+        const r = card.getBoundingClientRect();
+        const x = (e.clientX - r.left) / r.width  - 0.5;
+        const y = (e.clientY - r.top)  / r.height - 0.5;
+        card.style.transform = `perspective(800px) rotateY(${x * 5}deg) rotateX(${-y * 4}deg) translateZ(4px)`;
+      });
+      card.addEventListener('mouseleave', () => {
+        card.style.transform = '';
+      });
+    });
+
+    /* ── THEME TOGGLE ── */
+    const html  = document.documentElement;
+    const icon  = document.getElementById('themeIcon');
+    const saved = localStorage.getItem('theme') || 'dark';
+    html.setAttribute('data-theme', saved);
+    icon.textContent = saved === 'dark' ? '🌙' : '☀️';
+
+    document.getElementById('themeToggle').addEventListener('click', () => {
+      const next = html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+      html.setAttribute('data-theme', next);
+      icon.textContent = next === 'dark' ? '🌙' : '☀️';
+      localStorage.setItem('theme', next);
+    });
+
+    /* ── FILTER TABS ── */
+    document.querySelectorAll('.filter-tab').forEach(tab => {
+      tab.addEventListener('click', () => {
+        document.querySelectorAll('.filter-tab').forEach(t => t.classList.remove('active'));
+        tab.classList.add('active');
+        const f = tab.dataset.filter;
+        document.querySelectorAll('.project-card').forEach(card => {
+          const show = f === 'all' || card.dataset.category === f;
+          card.classList.toggle('hidden', !show);
+        });
+      });
+    });
+
+    /* ── SCROLL REVEAL ── */
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); } });
+    }, { threshold: 0.1 });
+
+    document.querySelectorAll('.reveal, .stagger').forEach(el => observer.observe(el));
+
+    /* Trigger hero stagger on load */
+    setTimeout(() => {
+      document.querySelector('.skills.stagger')?.classList.add('visible');
+    }, 400);
+
+    /* ── CAROUSELS ── */
+    const carousels = {};
+
+    function initCarousel(id, count) {
+      carousels[id] = { current: 0, count };
+      const dots = document.getElementById('dots-' + id);
+      for (let i = 0; i < count; i++) {
+        const d = document.createElement('div');
+        d.className = 'carousel-dot' + (i === 0 ? ' active' : '');
+        d.onclick = () => goTo(id, i);
+        dots.appendChild(d);
+      }
+    }
+
+    function goTo(id, idx) {
+      const c = carousels[id];
+      c.current = (idx + c.count) % c.count;
+      document.getElementById('track-' + id).style.transform = `translateX(-${c.current * 100}%)`;
+      document.querySelectorAll('#dots-' + id + ' .carousel-dot').forEach((d, i) => {
+        d.classList.toggle('active', i === c.current);
+      });
+    }
+
+    function carouselPrev(id) { goTo(id, carousels[id].current - 1); }
+    function carouselNext(id) { goTo(id, carousels[id].current + 1); }
+
+    initCarousel('ooredoo', 8);
+    initCarousel('renault', 2);
+
+    /* Auto-advance carousels */
+    setInterval(() => carouselNext('ooredoo'), 4000);
+    setInterval(() => carouselNext('renault'), 5000);
+
+    /* ── LIGHTBOX ── */
+    let lbImages = [];
+    let lbIndex  = 0;
+    let lbZoomed = false;
+    const lb        = document.getElementById('lightbox');
+    const lbImg     = document.getElementById('lbImg');
+    const lbCaption = document.getElementById('lbCaption');
+    const lbCounter = document.getElementById('lbCounter');
+    const lbThumbs  = document.getElementById('lbThumbs');
+    const lbWrapper = document.getElementById('lbWrapper');
+    const lbPrev    = document.getElementById('lbPrev');
+    const lbNext    = document.getElementById('lbNext');
+
+    function lbOpen(imgs, idx) {
+      lbImages = imgs;
+      lbZoomed = false;
+      lbImg.style.transform = '';
+      lbWrapper.style.cursor = 'zoom-in';
+      lb.style.display = 'flex';
+      document.body.style.overflow = 'hidden';
+      lbShow(idx);
+      buildThumbs();
+      // Animate in
+      lb.style.opacity = '0';
+      requestAnimationFrame(() => {
+        lb.style.transition = 'opacity 0.25s';
+        lb.style.opacity = '1';
+      });
+    }
+
+    function lbShow(idx) {
+      lbIndex = (idx + lbImages.length) % lbImages.length;
+      lbZoomed = false;
+      lbImg.style.transform = '';
+      lbWrapper.style.cursor = 'zoom-in';
+
+      lbImg.style.opacity = '0';
+      setTimeout(() => {
+        lbImg.src = lbImages[lbIndex].src;
+        lbImg.alt = lbImages[lbIndex].alt || '';
+        lbCaption.textContent = lbImages[lbIndex].caption || '';
+        lbCounter.textContent = `${lbIndex + 1} / ${lbImages.length}`;
+        lbImg.style.opacity = '1';
+      }, 150);
+
+      // Update thumbs
+      document.querySelectorAll('.lb-thumb').forEach((t, i) => {
+        t.style.opacity    = i === lbIndex ? '1' : '0.45';
+        t.style.outline    = i === lbIndex ? '2px solid #6366f1' : 'none';
+        t.style.outlineOffset = '2px';
+        if (i === lbIndex) t.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+      });
+
+      // Show/hide nav arrows
+      lbPrev.style.display = lbImages.length > 1 ? 'flex' : 'none';
+      lbNext.style.display = lbImages.length > 1 ? 'flex' : 'none';
+    }
+
+    function buildThumbs() {
+      lbThumbs.innerHTML = '';
+      if (lbImages.length <= 1) return;
+      lbImages.forEach((img, i) => {
+        const t = document.createElement('img');
+        t.src = img.src;
+        t.className = 'lb-thumb';
+        t.style.cssText = 'width:56px;height:40px;object-fit:cover;border-radius:6px;cursor:pointer;opacity:0.45;transition:opacity 0.2s,outline 0.2s;flex-shrink:0;';
+        t.onclick = () => lbShow(i);
+        lbThumbs.appendChild(t);
+      });
+    }
+
+    function lbNav(dir) { lbShow(lbIndex + dir); }
+
+    function lbToggleZoom() {
+      lbZoomed = !lbZoomed;
+      lbImg.style.transform  = lbZoomed ? 'scale(2)' : '';
+      lbWrapper.style.cursor = lbZoomed ? 'zoom-out' : 'zoom-in';
+      lbWrapper.style.overflow = lbZoomed ? 'auto' : 'hidden';
+    }
+
+    function lbClose() {
+      lb.style.opacity = '0';
+      setTimeout(() => {
+        lb.style.display = 'none';
+        lb.style.opacity = '1';
+        lb.style.transition = '';
+        document.body.style.overflow = '';
+        lbZoomed = false;
+        lbImg.style.transform = '';
+      }, 250);
+    }
+
+    // Keyboard navigation
+    document.addEventListener('keydown', e => {
+      if (lb.style.display === 'none') return;
+      if (e.key === 'Escape')    lbClose();
+      if (e.key === 'ArrowLeft') lbNav(-1);
+      if (e.key === 'ArrowRight')lbNav(1);
+    });
+
+    // Close on backdrop click
+    lb.addEventListener('click', e => { if (e.target === lb) lbClose(); });
+
+    // Swipe support
+    let swipeX = 0;
+    lb.addEventListener('touchstart', e => { swipeX = e.touches[0].clientX; });
+    lb.addEventListener('touchend',   e => {
+      const dx = e.changedTouches[0].clientX - swipeX;
+      if (Math.abs(dx) > 50) lbNav(dx < 0 ? 1 : -1);
+    });
+
+    /* ── WIRE UP ALL IMAGES TO LIGHTBOX ── */
+    function collectAndWire() {
+      // Group images by card
+      document.querySelectorAll('.project-card').forEach(card => {
+        const imgs = Array.from(card.querySelectorAll('img:not(.lb-thumb)'))
+          .filter(img => !img.closest('.carousel-dots') && img.naturalWidth > 0 || img.src);
+
+        if (!imgs.length) return;
+
+        const imgData = imgs.map(img => ({
+          src: img.src,
+          alt: img.alt,
+          caption: img.closest('.card-body') ? '' : (card.querySelector('.card-title')?.textContent || '')
+        }));
+
+        imgs.forEach((img, i) => {
+          img.style.cursor = 'zoom-in';
+          img.title = 'Cliquer pour agrandir';
+          img.addEventListener('click', e => {
+            e.stopPropagation();
+            lbOpen(imgData, i);
+          });
+        });
+      });
+
+      // Also wire carousel images individually with group context
+      ['ooredoo', 'renault'].forEach(id => {
+        const track = document.getElementById('track-' + id);
+        if (!track) return;
+        const imgs = Array.from(track.querySelectorAll('img'));
+        const imgData = imgs.map(img => ({ src: img.src, alt: img.alt, caption: '' }));
+        imgs.forEach((img, i) => {
+          img.style.cursor = 'zoom-in';
+          img.removeEventListener('click', img._lbHandler);
+          img._lbHandler = e => { e.stopPropagation(); lbOpen(imgData, i); };
+          img.addEventListener('click', img._lbHandler);
+        });
+      });
+    }
+
+    // Run after images may have loaded
+    collectAndWire();
+    window.addEventListener('load', collectAndWire);
+  </script>
+
+</body>
+</html>
